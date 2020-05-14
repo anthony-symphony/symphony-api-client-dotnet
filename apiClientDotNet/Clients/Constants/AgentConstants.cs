@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace apiClientDotNet.Clients.Constants
+﻿namespace apiClientDotNet.Clients.Constants 
 {
-    public class AgentConstants
+    public class AgentConstants 
     {
-        public static String CREATEDATAFEED = "/agent/v4/datafeed/create";
-        public static String READDATAFEED = "/agent/v4/datafeed/{id}/read";
-        public static String CREATEMESSAGE = "/agent/v4/stream/{sid}/message/create";
-        public static String GETMESSAGES = "/agent/v4/stream/{sid}/message";
-        public static String GETATTACHMENT = "/v1/stream/{sid}/attachment";
-
-        public static String SEARCHMESSAGES = "/agent/v1/message/search";
-        public static String MESSAGEIMPORT = "/agent/v4/message/import" ;
-        public static String SHARE = "/agent/v3/stream/{sid}/share";
-        public static String LISTSIGNALS = "/agent/v1/signals/list";
-        public static String GETSIGNAL = "/agent/v1/signals/{id}/get" ;
-        public static String CREATESIGNAL = "/agent/v1/signals/create";
-        public static String UPDATESIGNAL = "/agent/v1/signals/{id}/update";
-        public static String DELETESIGNAL = "/agent/v1/signals/{id}/delete";
-        public static String SUBSCRIBESIGNAL = "/agent/v1/signals/{id}/subscribe";
-        public static String UNSUBSCRIBESIGNAL = "/agent/v1/signals/{id}/unsubscribe";
-        public static String GETSUBSCRIBERS = "/v1/signals/{id}/subscribers";
-
+        public const string CreateDatafeed = "/agent/v4/datafeed/create";
+        public const string ReadDatafeed = "/agent/v4/datafeed/{id}/read";
+        public const string CreateMessage = "/agent/v4/stream/{sid}/message/create";
+        public const string GetMessages = "/agent/v4/stream/{sid}/message";
+        public const string GetAttachment = "/v1/stream/{sid}/attachment";
+        public const string SearchMessages = "/agent/v1/message/search";
+        public const string MessageImport = "/agent/v4/message/import" ;
+        public const string Share = "/agent/v3/stream/{sid}/share";
+        public const string ListSignals = "/agent/v1/signals/list";
+        public const string GetSignal = "/agent/v1/signals/{id}/get" ;
+        public const string CreateSignal = "/agent/v1/signals/create";
+        public const string UpdateSignal = "/agent/v1/signals/{id}/update";
+        public const string DeleteSignal = "/agent/v1/signals/{id}/delete";
+        public const string SubscribeSignalPath = "/agent/v1/signals/{id}/subscribe";
+        public const string UnsubscribeSignal = "/agent/v1/signals/{id}/unsubscribe";
+        public const string GetSubscribers = "/v1/signals/{id}/subscribers";
     }
 }

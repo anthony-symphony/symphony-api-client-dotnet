@@ -1,57 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace apiClientDotNet.Clients.Constants
-{
-    public class PodConstants
+﻿namespace apiClientDotNet.Clients.Constants {
+    public class PodConstants 
     {
-        public static String POD = "/pod";
-        public static String GETUSERSV3 = POD+"/v3/users";
-        public static String GETUSERV2 = POD+"/v2/user";
-        public static String GETIM = POD+"/v1/im/create";
-        public static String CREATEROOM = POD+"/v3/room/create";
-        public static String ADDMEMBER = POD+"/v1/room/{id}/membership/add";
-        public static String REMOVEMEMBER = POD+"/v1/room/{id}/membership/remove";
-        public static String GETROOMINFO = POD+"/v3/room/{id}/info";
-        public static String UPDATEROOMINFO = POD+"/v3/room/{id}/update";
-        public static String GETSTREAMINFO = POD+"/v2/streams/{id}/info";
-        public static String GETROOMMEMBERS = POD+"/v2/room/{id}/membership/list";
-        public static String SETACTIVE = POD+"/v1/admin/room/{id}/setActive";
-        public static String PROMOTEOWNER = POD+"/v1/room/{id}/membership/promoteOwner";
-        public static String DEMOTEOWNER = POD+"/v1/room/{id}/membership/demoteOwner";
-        public static String ACCEPTCONNECTION = POD+"/v1/connection/accept";
-        public static String REJECTCONNECTION = POD+"/v1/connection/reject";
-        public static String GETCONNECTIONSTATUS = POD+"/v1/connection/user/{userId}/info";
-        public static String REMOVECONNECTION = POD+"/v1/connection/user/{userId}/remove";
-        public static String GETCONNECTIONS = POD + "v1/connection/list";
-        public static String SENDCONNECTIONREQUEST = POD+"/v1/connection/create";
-        public static String GETMESSAGESTATUS =  POD+"/v1/message/{mid}/status";
-        public static String GETUSERPRESENCE =  POD+"/v3/user/{uid}/presence";
-        public static String SETPRESENCE =  POD+"/v2/user/presence";
-        public static String REGISTERPRESENCEINTEREST =  POD+"/v1/user/presence/register";
-        public static String SEARCHUSERS =  POD+"/v1/user/search";
-
-        public static String SEARCHROOMS = POD+"/v3/room/search";
-        public static String MESSAGESUPPRESS = POD+"/v1/admin/messagesuppression/{id}/suppress";
-        public static String GETATTACHMENTTYPES = POD+ "/v1/files/allowedTypes";
-        public static String ADMINCREATEIM = POD+ "/v1/admin/im/create";
-        public static String LISTUSERSTREAMS = POD+"/v1/streams/list";
-        public static String ENTERPRISESTREAMS = POD+"/v2/admin/streams/list";
-        public static String GETUSERADMIN = POD+"/v2/admin/user/{uid}" ;
-        public static String LISTUSERSADMIN = POD+"/v2/admin/user/list" ;
-        public static String GETAVATARADMIN = POD+"/v1/admin/user/{uid}/avatar";
-        public static String GETUSERSTATUSADMIN = POD+"/v1/admin/user/{uid}/status";
-        public static String UPDATEUSERSTATUSADMIN = POD+"/v1/admin/user/{uid}/status/update";
-        public static String PODFEATURESADMIN = POD+"/v1/admin/system/features/list";
-
-        public static String GETUSERFEATURESADMIN = POD+ "/v1/admin/user/{uid}/features" ;
-        public static String UPDATEUSERFEATURESADMIN = POD +"/v1/admin/user/{uid}/features/update";
-        public static String GETUSERAPPLICATIONSADMIN = POD +"/v1/admin/user/{uid}/app/entitlement/list";
-        public static String UPDATEUSERAPPLICATIONSADMIN = POD +"/v1/admin/user/{uid}/app/entitlement/list";
-        public static String ADMINCREATEUSER =  POD +"/v2/admin/user/create";
-        public static String ADMINUPDATEUSER = POD +"/v2/admin/user/{uid}/update";
-        public static String ADMINUPDATEAVATAR = POD + "/v1/admin/user/{uid}/avatar/update";
-        public static String GETSESSIONUSER = POD + "/v2/sessioninfo";
+        public const string Pod = "/pod";
+        public const string GetUsersV3 = Pod+ "/v3/users";
+        public const string GetUserV2 = Pod+ "/v2/user";
+        public const string GetIm = Pod+ "/v1/im/create";
+        public const string CreateRoom = Pod+ "/v3/room/create";
+        public const string AddMember = Pod+ "/v1/room/{id}/membership/add";
+        public const string RemoveMember = Pod+ "/v1/room/{id}/membership/remove";
+        public const string GetRoomInfo = Pod+ "/v3/room/{id}/info";
+        public const string UpdateRoomInfo = Pod+ "/v3/room/{id}/update";
+        public const string GetStreamInfo = Pod+ "/v2/streams/{id}/info";
+        public const string GetRoomMembers = Pod+ "/v2/room/{id}/membership/list";
+        public const string ListUserStreams = Pod+ "/v1/streams/list";
+        public const string SetActive = Pod+ "/v1/admin/room/{id}/setActive";
+        public const string PromoteOwner = Pod+ "/v1/room/{id}/membership/promoteOwner";
+        public const string DemoteOwner = Pod+ "/v1/room/{id}/membership/demoteOwner";
+        public const string AcceptConnection = Pod+ "/v1/connection/accept";
+        public const string RejectConnection = Pod+ "/v1/connection/reject";
+        public const string GetConnectionStatus = Pod+ "/v1/connection/user/{userId}/info";
+        public const string RemoveConnection = Pod+ "/v1/connection/user/{userId}/remove";
+        public const string ListConnections = Pod + "/v1/connection/list";
+        public const string SendConnectionRequest = Pod+ "/v1/connection/create";
+        public const string GetMessageStatus =  Pod+ "/v1/message/{mid}/status";
+        public const string GetUserPresence =  Pod+ "/v3/user/{uid}/presence";
+        public const string SetPresence =  Pod+ "/v2/user/presence";
+        public const string RegisterPresenceInterest =  Pod+ "/v1/user/presence/register";
+        public const string SearchUsers =  Pod+ "/v1/user/search";
+        public const string SearchRooms = Pod+ "/v3/room/search";
+        public const string GetAttachmentTypes = Pod+ "/v1/files/allowedTypes";
+        public const string AdminMessageSuppression = Pod+ "/v1/admin/messagesuppression/{id}/suppress";
+        public const string AdminCreateIm = Pod+ "/v1/admin/im/create";
+        public const string AdminListStreamsEnterprise = Pod+ "/v2/admin/streams/list";
+        public const string AdminGetUser = Pod+ "/v2/admin/user/{uid}" ;
+        public const string AdminListUsers = Pod+ "/v2/admin/user/list" ;
+        public const string AdminGetAvatar = Pod+ "/v1/admin/user/{uid}/avatar";
+        public const string AdminGetUserStatus = Pod+ "/v1/admin/user/{uid}/status";
+        public const string AdminUpdateUserStatus = Pod+ "/v1/admin/user/{uid}/status/update";
+        public const string AdminGetPodFeatures = Pod+ "/v1/admin/system/features/list";
+        public const string AdminGetUserFeatures = Pod+ "/v1/admin/user/{uid}/features" ;
+        public const string AdminUpdateUserFeatures = Pod + "/v1/admin/user/{uid}/features/update";
+        public const string AdminGetUserApplications = Pod + "/v1/admin/user/{uid}/app/entitlement/list";
+        public const string AdminUpdateUserApplications = Pod + "/v1/admin/user/{uid}/app/entitlement/list";
+        public const string AdminCreateUser =  Pod + "/v2/admin/user/create";
+        public const string AdminUpdateUser = Pod + "/v2/admin/user/{uid}/update";
+        public const string AdminUpdateAvatar = Pod + "/v1/admin/user/{uid}/avatar/update";
+        public const string GetSessionUser = Pod + "/v2/sessioninfo";
     }
 }
