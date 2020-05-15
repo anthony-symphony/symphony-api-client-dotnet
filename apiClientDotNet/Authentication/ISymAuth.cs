@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace apiClientDotNet.Authentication
+﻿namespace apiClientDotNet.Authentication 
 {
-    public interface ISymAuth
+    public interface ISymAuth 
     {
+        void Authenticate();
+        void SessionAuthenticate();
+        string GetSessionToken();
+        void SetSessionToken(string sessionToken);
+        void KeyManagerAuthenticate();
+        string GetKeyManagerToken();
+        void SetKeyManagerToken(string kmToken);
+        void Logout();
 
+
+        #region Legacy Forwarders
         void authenticate();
-
         void sessionAuthenticate();
-
-        void kmAuthenticate();
-
-        String getSessionToken();
-
-        void setSessionToken(String sessionToken);
-
-        String getKmToken();
-
-        void setKmToken(String kmToken);
-
+        string getSessionToken();
+        void setSessionToken(string sessionToken);
+        void keyManagerAuthenticate();
+        string getKeyManagerToken();
+        void setKeyManagerToken(string kmToken);
         void logout();
+        #endregion
     }
 }

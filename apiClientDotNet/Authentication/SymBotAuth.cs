@@ -1,91 +1,65 @@
 ﻿using System;
 using apiClientDotNet.Models;
-using System.Net;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using System.IO;
-using System.Text;
-using Newtonsoft.Json.Linq;
-using apiClientDotNet.Utils;
-
-
+using Newtonsoft.Json;
 
 namespace apiClientDotNet.Authentication
 {   
  
-    public class SymBotAuth : ISymAuth
+    public class SymBotAuth : SymAuthBase
     {
-
-        AuthTokens authTokens;
-        private String sessionToken;
-        private String kmToken;
-        private SymConfig symConfig;
-        //private Client sessionAuthClient;
-        //private Client kmAuthClient;
-
         public SymBotAuth(SymConfig config)
         {
-            symConfig = config;
+            SymConfig = config;
+            InitializeAuthClients();
         }
 
-            public void authenticate()
+        public override void Authenticate()
         {
-            authTokens = new AuthTokens();
-            sessionAuthenticate();
-            kmAuthenticate();
-            symConfig.authTokens = authTokens;
+            SessionAuthenticate();
+            KeyManagerAuthenticate();
         }
 
-        public void sessionAuthenticate()
+        public override void SessionAuthenticate()
         {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + "/sessionauth/v1/authenticate";
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            authTokens.sessionToken = (string)o["token"];
-            sessionToken = authTokens.sessionToken;
+            var response = SessionAuthClient.PostAsync(AuthEndpointConstants.SessionAuthPath, null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                SessionToken = JsonConvert.DeserializeObject<Token>(result).token;
+            }
+            else 
+            {
+                SessionToken = null;
+            }
         }
 
-        public void kmAuthenticate()
+        public override void KeyManagerAuthenticate()
         {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + "/keyauth/v1/authenticate";
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            authTokens.keyManagerToken = (string)o["token"];
-            kmToken = authTokens.keyManagerToken;
-
+            var response = KeyAuthClient.PostAsync(AuthEndpointConstants.KeyAuthPath, null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                KeyManagerToken = JsonConvert.DeserializeObject<Token>(result).token;
+            }
+            else 
+            {
+                KeyManagerToken = null;
+            }
         }
 
-        public String getSessionToken()
+        public override string GetKeyManagerToken()
         {
-            return sessionToken;
-
+            return KeyManagerToken;
+        }
+        
+        public override void SetKeyManagerToken(string kmToken)
+        {
+            KeyManagerToken = kmToken;
         }
 
-        public void setSessionToken(String sessionToken)
+        public override void Logout() 
         {
-
-        }
-
-        public String getKmToken()
-        {
-            return kmToken;
-        }
-
-        public void setKmToken(String kmToken)
-        {
-
-        }
-
-        public void logout()
-        {
-
+            throw new NotImplementedException();
         }
     }
 }

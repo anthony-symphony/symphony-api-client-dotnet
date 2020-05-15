@@ -61,10 +61,7 @@ namespace apiClientDotNet.Models
         [JsonProperty("botUsername")]
         public string botUsername { get; set; }
 
-        public AuthTokens authTokens { get; set; }
-
         #region Global Proxy
-
         [JsonProperty("proxyURL")]
         public string proxyURL { get; set; }
 
@@ -73,11 +70,9 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("proxyPassword")]
         public string proxyPassword { get; set; }
-
         #endregion
 
         #region Session proxy
-
         [JsonProperty("sessionProxyURL")]
         public string sessionProxyURL { get; set; }
 
@@ -86,11 +81,9 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("sessionProxyPassword")]
         public string sessionProxyPassword { get; set; }
-
         #endregion
 
         #region Key Manager proxy
-
         [JsonProperty("keyManagerProxyURL")]
         public string keyManagerProxyURL { get; set; }
 
@@ -99,11 +92,9 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("keyManagerProxyPassword")]
         public string keyManagerProxyPassword { get; set; }
-
         #endregion
 
         #region Pod proxy
-
         [JsonProperty("podProxyURL")]
         public string podProxyURL { get; set; }
 
@@ -112,11 +103,9 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("podProxyPassword")]
         public string podProxyPassword { get; set; }
-
         #endregion
 
         #region Agent proxy
-
         [JsonProperty("agentProxyURL")]
         public string agentProxyURL { get; set; }
 
@@ -125,7 +114,6 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("agentProxyPassword")]
         public string agentProxyPassword { get; set; }
-
         #endregion
     }
 }

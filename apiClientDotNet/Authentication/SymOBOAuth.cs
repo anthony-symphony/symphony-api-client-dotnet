@@ -1,57 +1,86 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
-using Newtonsoft.Json.Linq;
-using apiClientDotNet.Utils;
-using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
 
-namespace apiClientDotNet.Authentication
+
+namespace apiClientDotNet.Authentication 
 {
 
-    public class SymOBOAuth 
+    public class SymOBOAuth : SymAuthBase
     {
-        AuthTokens authTokens;
-        private String sessionToken;
-        private String kmToken;
-        private SymConfig symConfig;
-
-        public SymOBOAuth(SymConfig config)
-        {
-            symConfig = config;
-            authTokens = new AuthTokens();
+        public string AppSessionToken
+        { 
+            get { return SessionToken; }
+            set { SessionToken = value; }
         }
+        
+        private string UserSessionToken;
 
-        public SymOBOUserAuth getUserAuth(String username)
+        public SymOBOAuth(SymConfig config) 
         {
-            SymOBOUserAuth userAuth = new SymOBOUserAuth(symConfig, username, this);
-            userAuth.authenticate();
-            authTokens.sessionToken = userAuth.getSessionToken();
-            sessionToken = userAuth.getSessionToken();
+            SymConfig = config;
+            InitializeAuthClients();
+        }
+        public SymOBOUserAuth GetUserAuth(string username) 
+        {
+            SymOBOUserAuth userAuth = new SymOBOUserAuth(username, this);
+            UserSessionToken = userAuth.GetUserSessionToken();
             return userAuth;
         }
 
-        public SymOBOUserAuth getUserAuth(long uid)
+        public SymOBOUserAuth GetUserAuth(long uid) 
         {
-            SymOBOUserAuth userAuth = new SymOBOUserAuth(symConfig,
-                    uid, this);
-            userAuth.authenticate();
+            SymOBOUserAuth userAuth = new SymOBOUserAuth(uid, this);
+            UserSessionToken = userAuth.GetUserSessionToken();
             return userAuth;
         }
 
-        public void sessionAppAuthenticate()
+        public override void SessionAuthenticate() 
         {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + AuthEndpointConstants.SESSIONAPPAUTH;
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            authTokens.sessionToken = (string)o["token"];
-            sessionToken = authTokens.sessionToken;
-            symConfig.authTokens = authTokens;
+            var response = SessionAuthClient.PostAsync(AuthEndpointConstants.AppSessionAuthPath, null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                SessionToken = JsonConvert.DeserializeObject<Token>(result).token;
+            }
+            else 
+            {
+                SessionToken = null;
+            }
         }
 
+        public HttpClient GetAppAuthClient() 
+        {
+            return SessionAuthClient;
+        }
 
+        public override void Authenticate()
+        {
+            sessionAuthenticate();
+        }
+
+        public override void KeyManagerAuthenticate() {}
+        public override string GetKeyManagerToken()
+        {
+            return null;
+        }
+        
+        public override void SetKeyManagerToken(string kmToken) {}
+
+        public override void Logout()
+        {
+            throw new NotImplementedException();
+        }
+
+        public SymOBOUserAuth getUserAuth(string username) 
+        {
+            return GetUserAuth(username);
+        }
+
+        public SymOBOUserAuth getUserAuth(long uid) 
+        {
+            return GetUserAuth(uid);
+        }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using apiClientDotNet.Services;
+﻿using apiClientDotNet.Services;
 using apiClientDotNet.Models;
 using apiClientDotNet.Clients;
 using apiClientDotNet.Authentication;
@@ -9,124 +6,68 @@ using System.Net;
 
 namespace apiClientDotNet
 {
-    public class SymBotClient : ISymClient
+    public class SymBotClient : SymClientBase
     {
-        private static SymBotClient botClient;
-        private SymConfig config;
-        private ISymAuth symBotAuth;
-        private DatafeedEventsService datafeedEventsService;
-        private MessageClient messagesClient;
-        private StreamClient streamClient;
-        private PresenceClient presenceClient;
-        private UserClient userClient;
-        private ConnectionsClient connectionsClient;
-        private SignalsClient signalsClient;
-        private UserInfo botUserInfo;
-
-        public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
+        private static SymBotClient BotClient;
+        private DatafeedClient DatafeedClient;
+        private DatafeedEventsService DatafeedEventsService;
+        private UserInfo BotUserInfo;
+    
+        public static SymBotClient InitBot(SymConfig config, ISymAuth symBotAuth)
         {
             ServicePointManager.DefaultConnectionLimit = 10;
-            if (botClient == null)
+            if (BotClient == null)
             {
-                botClient = new SymBotClient(config, symBotAuth);
-                return botClient;
+                BotClient = new SymBotClient(config, symBotAuth);
+                return BotClient;
             }
-            return botClient;
+            return BotClient;
         }
 
         private SymBotClient(SymConfig config, ISymAuth symBotAuth)
         {
-            this.config = config;
-            this.symBotAuth = symBotAuth;
+            SymConfig = config;
+            SymAuth = symBotAuth;
+            InitializeBaseClient();
         }
 
-        private SymBotClient(SymConfig config, SymBotAuth symBotAuth)//, ClientConfig podClientConfig, ClientConfig agentClientConfig)
+        public DatafeedEventsService GetDatafeedEventsService()
         {
-            this.config = config;
-            this.symBotAuth = symBotAuth;
-            //this.podClient = ClientBuilder.newClient(podClientConfig);
-            //this.agentClient = ClientBuilder.newClient(agentClientConfig);
-            
+            if (DatafeedEventsService == null)
+            {
+               DatafeedEventsService = new DatafeedEventsService(this);
+            }
+            return DatafeedEventsService;
+        }
+
+        public DatafeedClient GetDatafeedClient()
+        {   
+            if (DatafeedClient == null)
+            {
+               DatafeedClient = new DatafeedClient(this);
+            }
+            return DatafeedClient;
+        }
+
+        public UserInfo GetBotUserInfo()
+        {
+            if (BotUserInfo == null)
+            {
+                BotUserInfo = BotClient.GetUsersClient().GetSessionUser();
+            }
+            return BotUserInfo;
+        }
+
+        
+        #region Legacy Forwarders
+        public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
+        {
+            return InitBot(config, symBotAuth);
         }
         public DatafeedEventsService getDatafeedEventsService()
         {
-            if (datafeedEventsService == null)
-            {
-               datafeedEventsService = new DatafeedEventsService(this);
-            }
-            return datafeedEventsService;
+            return GetDatafeedEventsService();
         }
-
-        public SymConfig getConfig()
-        {
-            return config;
-        }
-
-        public ISymAuth getSymAuth()
-        {
-            return symBotAuth;
-        }
-
-        public MessageClient getMessagesClient()
-        {
-            if (messagesClient == null)
-            {
-                messagesClient = new MessageClient(this);
-            }
-            return messagesClient;
-        }
-
-        public StreamClient getStreamsClient()
-        {
-            if (streamClient == null)
-            {
-                streamClient = new StreamClient(this);
-            }
-            return streamClient;
-        }
-
-        public PresenceClient getPresenceClient()
-        {
-            if (presenceClient == null)
-            {
-                presenceClient = new PresenceClient(this);
-            }
-            return presenceClient;
-        }
-
-        public UserClient getUsersClient()
-        {
-            if (userClient == null)
-            {
-                userClient = new UserClient(this);
-            }
-            return userClient;
-        }
-
-        public ConnectionsClient getConnectionsClient()
-        {
-            if (connectionsClient == null)
-            {
-                connectionsClient = new ConnectionsClient(this);
-            }
-            return connectionsClient;
-        }
-
-        public SignalsClient getSignalsClient()
-        {
-            if (signalsClient == null)
-            {
-                signalsClient = new SignalsClient(this);
-            }
-            return signalsClient;
-        }
-
-        public UserInfo getBotUserInfo(){
-            if (botUserInfo == null)
-            {
-                botUserInfo = botClient.getUsersClient().getSessionUser();
-            }
-            return botUserInfo;
-        }
+        #endregion
     }
 }

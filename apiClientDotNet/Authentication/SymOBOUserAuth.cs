@@ -1,106 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
-using Newtonsoft.Json.Linq;
-using apiClientDotNet.Utils;
-using System.Net;
+using Newtonsoft.Json;
 
 namespace apiClientDotNet.Authentication
 {
-    public class SymOBOUserAuth : ISymAuth
+    public class SymOBOUserAuth
     {
-        AuthTokens authTokens;
-        private String sessionToken;
-        private SymConfig config;
-        private long uid;
-        private String username;
-        private SymOBOAuth appAuth;
+        public long UserId {get; private set;}
+        public String UserName {get; private set;}
+        private SymOBOAuth AppAuth;
+        public string UserSessionToken {get; private set;}
 
-        public SymOBOUserAuth( SymConfig config, long uid, SymOBOAuth appAuth)
+        public SymOBOUserAuth(long uid, SymOBOAuth appAuth)
         {
-            this.config = config;
-            this.uid = uid;
-            this.appAuth = appAuth;
-            authTokens = config.authTokens;
+            UserId = uid;
+            AppAuth = appAuth;
         }
 
-        public SymOBOUserAuth( SymConfig config, String username, SymOBOAuth appAuth)
+        public SymOBOUserAuth(string username, SymOBOAuth appAuth)
         {
-            this.config = config;
-            this.username = username;
-            this.appAuth = appAuth;
-            authTokens = config.authTokens;
+            UserName = username;
+            AppAuth = appAuth;
         }
 
-        public void authenticate()
+        public string GetUserSessionToken()
         {
-            sessionAuthenticate();
-        }
-
-        public string getKmToken()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string getSessionToken()
-        {
-            return sessionToken;
-        }
-
-        public void kmAuthenticate()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void sessionAuthenticate()
-        {
-            if (uid != 0)
+            string requestPath;
+            if (UserId != 0) 
             {
-                RestRequestHandler restRequestHandler = new RestRequestHandler();
-                string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTH.Replace("{uid}", uid.ToString());
-                HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-                string body = restRequestHandler.ReadResponse(resp);
-                resp.Close();
-                JObject o = JObject.Parse(body);
-                authTokens.sessionToken = (string)o["sessionToken"];
-                sessionToken = authTokens.sessionToken;
+                requestPath = AuthEndpointConstants.OboUserAuthByIdPath.Replace("{uid}", UserId.ToString());
             }
-            else
+            else 
             {
-                RestRequestHandler restRequestHandler = new RestRequestHandler();
-                string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTHUSERNAME.Replace("{username}", username);
-                HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-                string body = restRequestHandler.ReadResponse(resp);
-                resp.Close();
-                JObject o = JObject.Parse(body);
-                authTokens.sessionToken = (string)o["sessionToken"];
-                sessionToken = authTokens.sessionToken;
-
+                requestPath = AuthEndpointConstants.OboUserAuthByUsernamePath.Replace("{username}", UserName);
+            }
+            var response = AppAuth.GetAppAuthClient().PostAsync(requestPath, null).Result;
+            if (response.IsSuccessStatusCode) 
+            {
+                return JsonConvert.DeserializeObject<Token>(response.Content.ReadAsStringAsync().Result).token;
+            }
+            else 
+            {
+                throw new Exception("Unable to Authenticate");
             }
         }
 
-        public void setKmToken(string kmToken)
+        public void Logout()
         {
-            throw new NotImplementedException();
-        }
-
-        public void setSessionToken(string sessionToken)
-        {
-
-            this.sessionToken = sessionToken;
-            this.authTokens.sessionToken = sessionToken;
-        }
-
-        public void logout()
-        {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.LOGOUTPATH;
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            string message = (string)o["message"];
+            var response = AppAuth.GetAppAuthClient().PostAsync(AuthEndpointConstants.LogoutPath, null).Result;
         }
     }
 }

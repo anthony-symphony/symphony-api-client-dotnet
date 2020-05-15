@@ -1,15 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using apiClientDotNet.Models;
+﻿using apiClientDotNet.Models;
 using apiClientDotNet.Authentication;
+using System.Net.Http;
 
 namespace apiClientDotNet.Clients
 {
     public interface ISymClient
     {
-        SymConfig getConfig();
+        SymConfig GetConfig();
 
+        ISymAuth GetSymAuth();
+
+        MessageClient GetMessagesClient();
+
+        StreamClient GetStreamsClient();
+
+        PresenceClient GetPresenceClient();
+
+        UserClient GetUsersClient();
+
+        ConnectionsClient GetConnectionsClient();
+        HttpClient GetPodHttpClient();
+        HttpClient GetAgentHttpClient();
+        HttpClient GetDefaultHttpClient();
+
+
+        #region Legacy Forwarders        
+        SymConfig getConfig();
+ 
         ISymAuth getSymAuth();
 
         MessageClient getMessagesClient();
@@ -22,12 +39,6 @@ namespace apiClientDotNet.Clients
 
         ConnectionsClient getConnectionsClient();
 
-        /*public Client getPodClient();
-
-        public Client getAgentClient();
-
-        public void setPodClient(Client podClient);
-
-        public void setAgentClient(Client agentClient);*/
+        #endregion
     }
 }

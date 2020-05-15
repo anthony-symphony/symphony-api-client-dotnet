@@ -1,81 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
-using System.Net;
-using Newtonsoft.Json.Linq;
+using System.Net.Http;
 using apiClientDotNet.Utils;
+using Newtonsoft.Json;
 
-namespace apiClientDotNet.Authentication
+namespace apiClientDotNet.Authentication 
 {
-    public class SymBotRSAAuth : ISymAuth
+    public class SymBotRSAAuth : SymAuthBase 
     {
-
-        AuthTokens authTokens;
-        private String sessionToken;
-        private String kmToken;
-        private SymConfig symConfig;
-        private String jwt;
-
-        public SymBotRSAAuth(SymConfig config) {
-            this.symConfig = config;
-            this.authTokens = new AuthTokens();
+        private String JsonWebToken;
+        public SymBotRSAAuth(SymConfig config) 
+        {
+            this.SymConfig = config;
+            InitializeAuthClients();
         }
         
-        public void authenticate() {
+        public override void Authenticate() 
+        {
             JWTHandler jwtHandler = new JWTHandler();
-            jwt = jwtHandler.generateJWT(symConfig);
-            sessionAuthenticate();
-            kmAuthenticate();
-            symConfig.authTokens = authTokens;
+            JsonWebToken = jwtHandler.generateJWT(SymConfig);
+            SessionAuthenticate();
+            KeyManagerAuthenticate();
         }
         
-        public void sessionAuthenticate() {
-
-            Dictionary<String, String> token = new Dictionary<string, string>();
-            token.Add("token", jwt);
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + AuthEndpointConstants.RSASESSIONAUTH;
-            HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            authTokens.sessionToken = (string) o.SelectToken("token");
-            sessionToken = authTokens.sessionToken;    
+        public override void SessionAuthenticate() 
+        {
+            var token = new 
+            {
+                token = JsonWebToken
+            };
+            var response = SessionAuthClient.PostAsync(AuthEndpointConstants.RsaSessionAuthPath, new StringContent(JsonConvert.SerializeObject(token))).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                SessionToken = JsonConvert.DeserializeObject<Token>(result).token;
+            }
+            else 
+            {
+                SessionToken = null;
+            }
         }
 
-        public void kmAuthenticate() {
+        public override void KeyManagerAuthenticate() {
 
-            Dictionary<String, String> token = new Dictionary<string, string>();
-            token.Add("token", jwt);
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + AuthEndpointConstants.RSAKMAUTH;
-            HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            authTokens.keyManagerToken = (string) o.SelectToken("token");
-            kmToken = authTokens.keyManagerToken;
+            var token = new 
+            {
+                token = JsonWebToken
+            };
+            var response = KeyAuthClient.PostAsync(AuthEndpointConstants.RsaKeyManagerAuthPath, new StringContent(JsonConvert.SerializeObject(token))).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                KeyManagerToken = JsonConvert.DeserializeObject<Token>(result).token;
+            }
+            else 
+            {
+                KeyManagerToken = null;
+            }
         }
 
-        public String getSessionToken() {
-            return sessionToken;
+        public override string GetKeyManagerToken()
+        {
+            return KeyManagerToken;
+        }
+        
+        public override void SetKeyManagerToken(string kmToken)
+        {
+            KeyManagerToken = kmToken;
         }
 
-        public void setSessionToken(String sessionToken) {
-            this.sessionToken = sessionToken;
-        }
-
-        public String getKmToken() {
-            return kmToken;
-        }
-
-        public void setKmToken(String kmToken) {
-            this.kmToken = kmToken;
-        }
-
-        public void logout() {
-            //Add Logout
+        public override void Logout() 
+        {
+            throw new NotImplementedException();
         }
     }
 }
