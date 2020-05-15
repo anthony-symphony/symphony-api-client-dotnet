@@ -8,27 +8,80 @@ namespace apiClientDotNet.Models
     public class AdminStreamInfo
     {
         [JsonProperty("streamTypes")]
-        public String id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("isExternal")]
-        public Boolean isExternal { get; set; }
+        public bool IsExternal { get; set; }
 
         [JsonProperty("isActive")]
-        public Boolean isActive { get; set; }
+        public bool IsActive { get; set; }
 
         [JsonProperty("isPublic")]
-        public Boolean isPublic { get; set; }
+        public bool IsPublic { get; set; }
 
         [JsonProperty("type")]
-        public String type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("crossPod")]
-        public Boolean crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
         [JsonProperty("origin")]
-        public String origin { get; set; }
+        public string Origin { get; set; }
 
         [JsonProperty("attributes")]
-        public AdminStreamAttributes attributes { get; set; }
+        public AdminStreamAttributes Attributes { get; set; }
+
+
+        #region Legacy Forwarders
+        [Obsolete("Property is deprecated. Use Id")]
+        public string id 
+        { 
+            get { return Id; } 
+            set { Id = value; }
+        }
+
+        [Obsolete("Property is deprecated. Use IsExternal")]
+        public bool isExternal 
+        { 
+            get { return IsExternal; } 
+            set { IsExternal = value; } 
+        }
+        [Obsolete("Property is deprecated. Use IsActive")]
+        public bool isActive 
+        { 
+            get { return IsActive; } 
+            set { IsActive = value; }
+        }
+        [Obsolete("Property is deprecated. Use IsPublic")]
+        public bool isPublic 
+        { 
+            get { return IsPublic; } 
+            set { IsPublic = value; }
+        }
+        [Obsolete("Property is deprecated. Use Type")]
+        public string type 
+        { 
+            get { return Type; } 
+            set { Type = value; } 
+        }
+        [Obsolete("Property is deprecated. Use CrossPod")]
+        public bool crossPod 
+        { 
+            get { return CrossPod; } 
+            set { CrossPod = value; } 
+        }
+        [Obsolete("Property is deprecated. Use Origin")]
+        public string origin 
+        { 
+            get { return Origin; } 
+            set { Origin = value; } 
+        }
+        [Obsolete("Property is deprecated. Use Attributes")]
+        public AdminStreamAttributes attributes 
+        { 
+            get { return Attributes; } 
+            set { Attributes = value; }
+        }
+        #endregion
     }
 }
