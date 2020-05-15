@@ -51,7 +51,12 @@ namespace apiClientDotNet.Services
             StopLoop = true;
         }
 
-        public Task GetEventsFromDatafeed()
+        public void GetEventsFromDatafeed()
+        {
+            Task.Run(() => StartReadingDatafeed()).Wait();
+        }
+
+        public Task GetEventsFromDatafeedAsync()
         {
             return Task.Run(() => StartReadingDatafeed());
         }
@@ -261,7 +266,7 @@ namespace apiClientDotNet.Services
 
         public void getEventsFromDatafeed()
         {
-            GetEventsFromDatafeed().Wait();
+            GetEventsFromDatafeed();
         }
 
         public void stopGettingEventsFromDatafeed()
