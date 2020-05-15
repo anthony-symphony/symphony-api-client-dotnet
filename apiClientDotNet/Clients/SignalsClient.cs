@@ -1,194 +1,135 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
 using apiClientDotNet.Utils;
-using System.Net;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using Newtonsoft.Json;
 using apiClientDotNet.Clients.Constants;
-using apiClientDotNet.Clients;
 
 namespace apiClientDotNet.Clients
 {
-    public class SignalsClient
+    public class SignalsClient : ApiClient
     {
-        private ISymClient botClient;
-
         public SignalsClient(ISymClient client)
         {
-            botClient = client;
+            SymClient = client;
 
         }
 
-        public List<Signal> listSignals(int skip, int limit)
+        public List<Signal> ListSignals(int? skip = 0, int? limit = 0)
         {
-            List<Signal> result = new List<Signal>();
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.LISTSIGNALS;
-
-
-            if (skip > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&skip=" + skip;
-                }
-                else
-                {
-                    url = url + "?skip=" + skip;
-                }
-            }
-            if (limit > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&limit=" + limit;
-                }
-                else
-                {
-                    url = url + "?limit=" + limit;
-                }
-            }
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            result = JsonConvert.DeserializeObject<List<Signal>>(body);
-        
-            return result;
-
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("skip", skip);
+            requestParams.AddParameter("limit", limit);
+            var requestUri = AgentConstants.ListSignals + requestParams.Query;
+            var result = ExecuteRequest<List<Signal>>(HttpMethod.Get, new Uri(requestUri,UriKind.Relative));
+            return result.ParsedObject;
         }
 
-        public Signal getSignal(String id)
+        public Signal GetSignal(string id)
         {
-            Signal result = new Signal();
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.GETSIGNAL.Replace("{id}", id);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            result = JsonConvert.DeserializeObject<Signal>(body);
+            var requestUri = new Uri(AgentConstants.GetSignal.Replace("{id}", id.ToString()), UriKind.Relative);
+            var result = ExecuteRequest<Signal>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
+        }
 
-            return result;
+        public Signal CreateSignal(Signal signal)
+        {
+            var requestUri = new Uri(AgentConstants.CreateSignal, UriKind.Relative);
+            var result = ExecuteRequest<Signal>(HttpMethod.Post, requestUri, signal);
+            return result.ParsedObject;
+        }
+
+        public Signal UpdateSignal(Signal signal)
+        {
+            var requestUri = new Uri(AgentConstants.UpdateSignal.Replace("{id}", signal.id), UriKind.Relative);
+            var result = ExecuteRequest<Signal>(HttpMethod.Post, requestUri, signal);
+            return result.ParsedObject;
+        }
+
+        public bool DeleteSignal(string id)
+        {
+            var requestUri = new Uri(AgentConstants.DeleteSignal.Replace("{id}", id), UriKind.Relative);
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public SignalSubscriptionResult SubscribeSignal(string id, List<long> uids = null, bool? pushed = null)
+        {
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("pushed", pushed);
+            var requestUri = AgentConstants.SubscribeSignalPath.Replace("{id}", id) + requestParams.Query;
+            var result = ExecuteRequest<SignalSubscriptionResult>(HttpMethod.Post, new Uri(requestUri, UriKind.Relative), uids);
+            return result.ParsedObject;
+        }
+
+
+        public SignalSubscriptionResult UnsubscribeSignal(string id, List<long> uids)
+        {
+            var requestUri = new Uri(AgentConstants.UnsubscribeSignal.Replace("{id}", id), UriKind.Relative);
+            var result = ExecuteRequest<SignalSubscriptionResult>(HttpMethod.Post, requestUri, uids);
+            return result.ParsedObject;
+        }
+
+        public SignalSubscriberList GetSignalSubscribers(string id, int? skip, int? limit)
+        {
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("skip", skip.ToString());
+            requestParams.AddParameter("limit", limit.ToString());
+            var requestUri = AgentConstants.GetSubscribers.Replace("{id}", id) + requestParams.Query;
+            var result = ExecuteRequest<SignalSubscriberList>(HttpMethod.Get, new Uri(requestUri, UriKind.Relative));
+            return result.ParsedObject;
+        }
+
+        #region Legacy Forwarders
+
+        public List<Signal> listSignals(int? skip, int? limit)
+        {
+            return ListSignals(skip, limit);
+        }
+
+        public Signal getSignal(string id)
+        {
+            return GetSignal(id);
         }
 
         public Signal createSignal(Signal signal)
         {
-            Signal result = new Signal();
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.CREATESIGNAL;
-            HttpWebResponse resp = restRequestHandler.executeRequest(signal, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            result = JsonConvert.DeserializeObject<Signal>(body);
+            return CreateSignal(signal);
+        }
 
-            return result;
+        public void deleteSignal(string id)
+        {
+            DeleteSignal(id);
         }
 
         public Signal updateSignal(Signal signal)
         {
-            Signal result = new Signal();
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UPDATESIGNAL.Replace("{id}", signal.id);
-            HttpWebResponse resp = restRequestHandler.executeRequest(signal, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            result = JsonConvert.DeserializeObject<Signal>(body);
-
-            return result;
-
+            return UpdateSignal(signal);
         }
 
-        public void deleteSignal(String id)
+        public SignalSubscriptionResult subscribeSignal(string id, bool self, List<long> uids, bool pushed)
         {
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.DELETESIGNAL.Replace("{id}", id);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-        }
-
-        public SignalSubscriptionResult subscribeSignal(String id, Boolean self, List<long> uids, Boolean pushed)
-        {
-
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            HttpWebResponse resp;
-            if (self) {
-                string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.SUBSCRIBESIGNAL.Replace("{id}", id);
-                resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);               
-             } else {
-                string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.SUBSCRIBESIGNAL.Replace("{id}", id) + "?pushed=" + pushed;
-                resp = restRequestHandler.executeRequest(uids, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            }
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<SignalSubscriptionResult>(body);
-        }
-
-        public SignalSubscriptionResult unsubscribeSignal(String id, Boolean self, List<long> uids) 
-        {
-
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            HttpWebResponse resp;
             if (self)
             {
-                string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UNSUBSCRIBESIGNAL.Replace("{id}", id);
-                resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+                uids = null;
             }
-            else
-            {
-                string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UNSUBSCRIBESIGNAL.Replace("{id}", id);
-                resp = restRequestHandler.executeRequest(uids, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            }
-
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<SignalSubscriptionResult>(body);
+            return SubscribeSignal(id, uids, pushed);
         }
 
-        public SignalSubscriberList getSignalSubscribers(String id, int skip, int limit) 
+        public SignalSubscriptionResult unsubscribeSignal(string id, bool self, List<long> uids) 
         {
-
-
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.GETSUBSCRIBERS.Replace("{id}", id);
-            if (skip > 0)
+            if (self)
             {
-                if (url.Contains("?"))
-                {
-                    url = url + "&skip=" + skip;
-                }
-                else
-                {
-                    url = url + "?skip=" + skip;
-                }
+                uids = null;
             }
-            if (limit > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&limit=" + limit;
-                }
-                else
-                {
-                    url = url + "?limit=" + limit;
-                }
-            }
-
-
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<SignalSubscriberList>(body);
+            return UnsubscribeSignal(id,uids);
         }
+
+        public SignalSubscriberList getSignalSubscribers(String id, int? skip, int? limit) 
+        {
+            return GetSignalSubscribers(id, skip, limit);
+        }
+        #endregion
     }
 }

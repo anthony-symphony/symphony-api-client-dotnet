@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -49,5 +47,7 @@ namespace apiClientDotNet.Models
         [JsonProperty("avatars")]
         public List<Avatar> avatars { get; set; }
 
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
     }
 }

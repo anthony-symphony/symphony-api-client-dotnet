@@ -1,75 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
-using apiClientDotNet.Utils;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using Newtonsoft.Json;
 using apiClientDotNet.Clients.Constants;
-using apiClientDotNet.Clients;
+using System.Net.Http;
 
 namespace apiClientDotNet.Clients
 {
-    public class PresenceClient
+    public class PresenceClient : ApiClient
     {
-        private ISymClient botClient;
-
         public PresenceClient(ISymClient client)
         {
-            botClient = client;
+            SymClient = client;
 
         }
 
-        public UserPresence getUserPresence(long userId, Boolean local)
+        public UserPresence GetUserPresence(long userId, bool local)
         {
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETUSERPRESENCE.Replace("{uid}", userId.ToString()) + "?local=" + local;
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<UserPresence>(body);
+            var requestUri = new Uri(PodConstants.GetUserPresence.Replace("{uid}",userId.ToString()), UriKind.Relative);
+            var result = ExecuteRequest<UserPresence>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
         }
 
-        public UserPresence setPresence(String status)
+        public UserPresence SetPresence(string status)
         {
-            Category category = new Category();
-            category.setCategory(status);
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SETPRESENCE;
-            HttpWebResponse resp = restRequestHandler.executeRequest(category, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<UserPresence>(body);
+            var requestUri = new Uri(PodConstants.SetPresence, UriKind.Relative);
+            UserPresence newStatus = new UserPresence();
+            newStatus.category = status;
+            var result = ExecuteRequest<UserPresence>(HttpMethod.Post, requestUri, newStatus);
+            return result.ParsedObject;
+        }
 
+        public bool RegisterInterestExtUser(List<long> userIds)
+        {
+            var requestUri = new Uri(PodConstants.RegisterPresenceInterest, UriKind.Relative);
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, userIds);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        #region Legacy Forwarders
+
+        public UserPresence getUserPresence(long userId, bool local)
+        {
+            return GetUserPresence(userId, local);
+        }
+
+        public UserPresence setPresence(string status)
+        {
+            return SetPresence(status);
         }
 
         public void registerInterestExtUser(List<long> userIds) 
         {
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REGISTERPRESENCEINTEREST;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userIds, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
+            RegisterInterestExtUser(userIds);
         }
-
-        private class Category
-        {
-            private String category;
-
-            public String getCategory()
-            {
-                return category;
-            }
-
-            public void setCategory(String category)
-            {
-                this.category = category;
-            }
-        }
+        #endregion
     }
 }

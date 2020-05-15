@@ -3,129 +3,87 @@ using System.Collections.Generic;
 using apiClientDotNet.Models;
 using apiClientDotNet.Models.Events;
 using apiClientDotNet.Listeners;
-using apiClientDotNet.Utils;
-using System.Net;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace apiClientDotNet.Services
 {
     public class DatafeedEventsService
     {
 
-        static bool stopLoop = false;
-        private List<RoomListener> roomListeners;
+        static bool StopLoop = false;
+        private List<RoomListener> RoomListeners;
         private List<IMListener> IMListeners;
-        private List<ConnectionListener> connectionListeners;
-	    private List<ElementsActionListener> elementsActionListeners;
-        private DatafeedClient datafeedClient;
-        private SymBotClient botClient;
-        public String datafeedId;
-        public Datafeed datafeed;
+        private List<ConnectionListener> ConnectionListeners;
+	    private List<ElementsActionListener> ElementsActionListeners;
+        private DatafeedClient DatafeedClient;
+        private SymBotClient BotClient;
+        public Datafeed Datafeed;
+        public String DatafeedId
+        {
+            get { return Datafeed.DatafeedId; }
+            set { Datafeed.DatafeedId = value; }
+        }
+        public string datafeedId
+        {
+            get { return Datafeed.DatafeedId; }
+            set { Datafeed.DatafeedId = value; }
+        }
 
         public DatafeedEventsService(SymBotClient client)
         {
-            this.botClient = client;
-            roomListeners = new List<RoomListener>();
+            BotClient = client;
+            RoomListeners = new List<RoomListener>();
             IMListeners = new List<IMListener>();
-            connectionListeners = new List<ConnectionListener>();
-	        elementsActionListeners = new List<ElementsActionListener>();
-            datafeedClient = new DatafeedClient();
-            datafeed = datafeedClient.createDatafeed(client.getConfig());
-            datafeedId = datafeed.datafeedID;
-
+            ConnectionListeners = new List<ConnectionListener>();
+	        ElementsActionListeners = new List<ElementsActionListener>();
+            DatafeedClient = client.GetDatafeedClient();
+            Datafeed = DatafeedClient.CreateDatafeed();
         }
 
-        public DatafeedClient init(SymConfig symConfig)
+        public DatafeedClient Init()
         {
-            roomListeners = new List<RoomListener>();
-            IMListeners = new List<IMListener>();
-            connectionListeners = new List<ConnectionListener>();
-	        elementsActionListeners = new List<ElementsActionListener>();
-            datafeedClient = new DatafeedClient();
-
-            return datafeedClient;
-        }
-	
-        public Datafeed createDatafeed(SymConfig symConfig, DatafeedClient datafeedClient)
-        {
-            Datafeed datafeed = datafeedClient.createDatafeed(symConfig);
-            return datafeed;
+            DatafeedClient = new DatafeedClient(BotClient);
+            return DatafeedClient;
         }
 
-        public void stopGettingEventsFromDatafeed()
+        public void StopGettingEventsFromDatafeed()
         {
-            stopLoop = true;
+            StopLoop = true;
         }
 
-        public void getEventsFromDatafeed()
+        public Task GetEventsFromDatafeed()
         {
-            List<DatafeedEvent> events = new List<DatafeedEvent>();
-            while (!stopLoop)
+            return Task.Run(() => StartReadingDatafeed());
+        }
+
+        private async Task StartReadingDatafeed()
+        {
+            while (!StopLoop)
             {
-                events = RunAsync(botClient.getConfig(), datafeed, datafeedClient).GetAwaiter().GetResult();
-                if (events != null)
-                {
-                    handleEvents(events);
-                }
-            }
-        }
-
-        static async Task<List<DatafeedEvent>> RunAsync(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
-        {
-            
-            List<DatafeedEvent> events = new List<DatafeedEvent>();
-            try
-            {
-                events = await GetEventAsync(symConfig, datafeed, datafeedClient);
-                return events;     
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return events;
-            }
-            
-        }
-
-        static async Task<List<DatafeedEvent>> GetEventAsync(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
-        {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            HttpWebResponse response = datafeedClient.getEventsFromDatafeed(symConfig, datafeed);
-            List<DatafeedEvent> events = null;
-            if (response.StatusCode.Equals(HttpStatusCode.OK) || response.StatusCode.Equals(HttpStatusCode.Accepted))
-            {
+                List<DatafeedEvent> events = new List<DatafeedEvent>();
                 try
                 {
-                    string body = restRequestHandler.ReadResponse(response);
-                    events = JsonConvert.DeserializeObject<List<DatafeedEvent>>(body);
+                    events = await Task.Run(() => GetEvents(Datafeed, DatafeedClient));
+                    _ = Task.Run(() => HandleEvents(events));
                 }
-                catch (JsonSerializationException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
                 }
             }
-            else if (response.StatusCode.Equals(HttpStatusCode.Forbidden) || response.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                //Add reauth 
-                stopLoop = true;
-            }
-            else if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
-            {
-                stopLoop = true;
-            }
-            response.Close();
+        }
+
+        static List<DatafeedEvent> GetEvents(Datafeed datafeed, DatafeedClient datafeedClient)
+        {
+            List<DatafeedEvent> events = datafeedClient.GetEventsFromDatafeed(datafeed);
             return events;
         }
 
-
-
-        private void handleEvents(List<DatafeedEvent> datafeedEvents)
+        private void HandleEvents(List<DatafeedEvent> datafeedEvents)
         {
             foreach (DatafeedEvent eventv4 in datafeedEvents)
             {
-                if(eventv4.initiator.user.userId != botClient.getBotUserInfo().id)
+                if(eventv4.initiator.user.userId != BotClient.GetBotUserInfo().id)
                 {
                     switch (eventv4.type)
                     {
@@ -134,7 +92,7 @@ namespace apiClientDotNet.Services
                             MessageSent messageSent = eventv4.payload.messageSent;
                             if (messageSent.message.stream.streamType.Equals("ROOM"))
                             {
-                                foreach (RoomListener listener in roomListeners)
+                                foreach (RoomListener listener in RoomListeners)
                                 {
                                     listener.onRoomMessage(messageSent.message);
                                 }
@@ -157,7 +115,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMCREATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomCreated(eventv4.payload.roomCreated);
                             }
@@ -165,7 +123,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMUPDATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomUpdated(eventv4.payload.roomUpdated);
                             }
@@ -173,7 +131,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMDEACTIVATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomDeactivated(eventv4.payload.roomDeactivated);
                             }
@@ -181,7 +139,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMREACTIVATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomReactivated(eventv4.payload.roomReactivated.stream);
                             }
@@ -189,7 +147,7 @@ namespace apiClientDotNet.Services
 
                         case "USERJOINEDROOM":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onUserJoinedRoom(eventv4.payload.userJoinedRoom);
                             }
@@ -197,7 +155,7 @@ namespace apiClientDotNet.Services
 
                         case "USERLEFTROOM":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onUserLeftRoom(eventv4.payload.userLeftRoom);
                             }
@@ -205,7 +163,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERPROMOTEDTOOWNER":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomMemberPromotedToOwner(eventv4.payload.roomMemberPromotedToOwner);
                             }
@@ -213,7 +171,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERDEMOTEDFROMOWNER":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (RoomListener listener in RoomListeners)
                             {
                                 listener.onRoomMemberDemotedFromOwner(eventv4.payload.roomMemberDemotedFromOwner);
                             }
@@ -221,7 +179,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONACCEPTED":
 
-                            foreach (ConnectionListener listener in connectionListeners)
+                            foreach (ConnectionListener listener in ConnectionListeners)
                             {
                                 listener.onConnectionAccepted(eventv4.payload.connectionAccepted.fromUser);
                             }
@@ -229,7 +187,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONREQUESTED":
 
-                            foreach (ConnectionListener listener in connectionListeners)
+                            foreach (ConnectionListener listener in ConnectionListeners)
                             {
                                 listener.onConnectionRequested(eventv4.payload.connectionRequested.toUser);
                             }
@@ -243,7 +201,7 @@ namespace apiClientDotNet.Services
 
                             SymphonyElementsAction symphonyElementsAction = eventv4.payload.symphonyElementsAction;
 			                User user = eventv4.initiator.user;
-                            foreach (ElementsActionListener listener in elementsActionListeners)
+                            foreach (ElementsActionListener listener in ElementsActionListeners)
                             {
                                 listener.onFormMessage(user, StreamID, symphonyElementsAction);
                             }
@@ -255,44 +213,99 @@ namespace apiClientDotNet.Services
             }
         }
 
-        public void addRoomListener(RoomListener listener)
+        public void AddRoomListener(RoomListener listener)
         {
-            roomListeners.Add(listener);
+            RoomListeners.Add(listener);
         }
 
-        public void removeRoomListener(RoomListener listener)
+        public void RemoveRoomListener(RoomListener listener)
         {
-            roomListeners.Remove(listener);
+            RoomListeners.Remove(listener);
         }
 
-        public void addIMListener(IMListener listener)
+        public void AddIMListener(IMListener listener)
         {
             IMListeners.Add(listener);
         }
 
-        public void removeIMListener(IMListener listener)
+        public void RemoveIMListener(IMListener listener)
         {
             IMListeners.Remove(listener);
         }
 
+        public void AddConnectionsListener(ConnectionListener listener)
+        {
+            ConnectionListeners.Add(listener);
+        }
+
+        public void RemoveConnectionsListener(ConnectionListener listener)
+        {
+            ConnectionListeners.Remove(listener);
+        }
+
+        public void AddElementsActionListener(ElementsActionListener listener)
+        {
+            ElementsActionListeners.Add(listener);
+        }
+
+        public void RemoveElementsActionListener(ElementsActionListener listener)
+        {
+            ElementsActionListeners.Remove(listener);
+        }
+
+
+        public DatafeedClient init(SymConfig symConfig)
+        {
+            return Init();
+        }
+
+        public void getEventsFromDatafeed()
+        {
+            GetEventsFromDatafeed().Wait();
+        }
+
+        public void stopGettingEventsFromDatafeed()
+        {
+            StopGettingEventsFromDatafeed();
+        }
+        public void addRoomListener(RoomListener listener)
+        {
+            AddRoomListener(listener);
+        }
+
+        public void removeRoomListener(RoomListener listener)
+        {
+            RemoveRoomListener(listener);
+        }
+
+        public void addIMListener(IMListener listener)
+        {
+            AddIMListener(listener);
+        }
+
+        public void removeIMListener(IMListener listener)
+        {
+            RemoveIMListener(listener);
+        }
+
         public void addConnectionsListener(ConnectionListener listener)
         {
-            connectionListeners.Add(listener);
+            AddConnectionsListener(listener);
         }
 
         public void removeConnectionsListener(ConnectionListener listener)
         {
-            connectionListeners.Remove(listener);
+            RemoveConnectionsListener(listener);
         }
 
         public void addElementsActionListener(ElementsActionListener listener)
         {
-            elementsActionListeners.Add(listener);
+            AddElementsActionListener(listener);
         }
 
         public void removeElementsActionListener(ElementsActionListener listener)
         {
-            elementsActionListeners.Remove(listener);
+            RemoveElementsActionListener(listener);
         }
     }
 }

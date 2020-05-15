@@ -1,332 +1,238 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
 using apiClientDotNet.Clients.Constants;
-using apiClientDotNet.Utils;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using Newtonsoft.Json;
 using apiClientDotNet.Clients;
+using System.Net.Http;
+using apiClientDotNet.Utils;
 
 namespace apiClientDotNet
 {
-    public class StreamClient
+    public class StreamClient : ApiClient
     {
-        private ISymClient botClient;
-
         public StreamClient(ISymClient client)
         {
-            botClient = client;
+            SymClient = client;
 
         }
-        static HttpClient client = new HttpClient();
 
-        public String getUserIMStreamId(long userId)
+        public string GetUserIMStreamId(long userId)
         {
             List<long> userIdList = new List<long>();
             userIdList.Add(userId);
-            return getUserListIM(userIdList);
+            return GetUserListIM(userIdList);
         }
 
-        public String getUserListIM(List<long> userIdList)
+        public string GetUserListIM(List<long> userIdList)
         {
+            var requestUri = new Uri(PodConstants.GetIm, UriKind.Relative);
+            var result = ExecuteRequest<StringId>(HttpMethod.Post, requestUri, userIdList);
+            return result.ParsedObject.id;
+        }
 
-            SymConfig symConfig = botClient.getConfig();
-            StringId id = new StringId();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETIM;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userIdList, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
+        public RoomInfo CreateRoom(Room room)
+        {
+            var requestUri = new Uri(PodConstants.CreateRoom, UriKind.Relative);
+            var result = ExecuteRequest<RoomInfo>(HttpMethod.Post, requestUri, room);
+            return result.ParsedObject;
+        }
+
+        public bool AddMemberToRoom(string streamId, long userId)
+        {
+            var requestUri = new Uri(PodConstants.AddMember.Replace("{id}", streamId), UriKind.Relative);
+            var id = new NumericId();
+            id.id = userId;
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, id);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public bool RemoveMemberFromRoom(string streamId, long userId)
+        {
+            var requestUri = new Uri(PodConstants.RemoveMember.Replace("{id}", streamId), UriKind.Relative);
+            var id = new NumericId();
+            id.id = userId;
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, id);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public RoomInfo GetRoomInfo(string streamId)
+        {
+            var requestUri = new Uri(PodConstants.GetRoomInfo.Replace("{id}", streamId), UriKind.Relative);
+            var result = ExecuteRequest<RoomInfo>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
+        }
+
+        public RoomInfo UpdateRoom(string streamId, Room room) 
+        {
+            var requestUri = new Uri(PodConstants.UpdateRoomInfo.Replace("{id}", streamId), UriKind.Relative);
+            var result = ExecuteRequest<RoomInfo>(HttpMethod.Post, requestUri, room);
+            return result.ParsedObject;
+         }
+
+        public StreamInfo GetStreamInfo(string streamId) 
+        {
+            var requestUri = new Uri(PodConstants.GetStreamInfo.Replace("{id}", streamId), UriKind.Relative);
+            var result = ExecuteRequest<StreamInfo>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
+        }
+
+        public List<RoomMember> GetRoomMembers(string streamId)
+        {
+            var requestUri = new Uri(PodConstants.GetRoomMembers.Replace("{id}",streamId), UriKind.Relative);
+            var result = ExecuteRequest<List<RoomMember>>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
+        }
+
+        public bool ActivateRoom(string streamId)
+        {
+            return SetActiveRoom(streamId, true);
+        }
+
+        public bool DeactivateRoom(string streamId)
+        {
+            return SetActiveRoom(streamId, false);
+        }
+
+        private bool SetActiveRoom(string streamId, bool active)
+        {
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("active", active.ToString());
+            var requestUri = PodConstants.SetActive.Replace("{id}", streamId) + requestParams.Query;
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, new Uri(requestUri, UriKind.Relative));
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public bool PromoteUserToOwner(string streamId, long userId) 
+        {
+            var requestUri = new Uri(PodConstants.PromoteOwner.Replace("{id}", streamId), UriKind.Relative);
+            NumericId id = new NumericId();
+            id.id = userId;
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public bool DemoteUserFromOwner(string streamId, long userId)
+        {
+            var requestUri = new Uri(PodConstants.DemoteOwner.Replace("{id}", streamId), UriKind.Relative);
+            NumericId id = new NumericId();
+            id.id = userId;
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
+            return result.HttpResponse.IsSuccessStatusCode;
+        }
+
+        public RoomSearchResult SearchRooms(RoomSearchQuery query, int? skip, int? limit)
+        {
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("skip", skip.ToString());
+            requestParams.AddParameter("limit", limit.ToString());
+            var requestUri = PodConstants.SearchRooms + requestParams.Query;
+            var result = ExecuteRequest<RoomSearchResult>(HttpMethod.Post, new Uri(requestUri, UriKind.Relative), query);
+            return result.ParsedObject;
+        }
+
+        public List<StreamListItem> GetUserStreams(List<string> streamTypes = null, bool? includeInactiveStreams = null, int? skip = null, int? limit = null) 
+        {
+            var requestObject = new
             {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                id = JsonConvert.DeserializeObject<StringId>(body);
-            }
-            resp.Close();
-            return id.id;
+                streamTypes = streamTypes,
+                includeInactiveStreams = includeInactiveStreams
+            };
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("skip", skip);
+            requestParams.AddParameter("limit", limit);
+            var requestUri = PodConstants.ListUserStreams + requestParams.Query;
+            var result = ExecuteRequest<List<StreamListItem>>(HttpMethod.Post, new Uri(requestUri, UriKind.Relative), requestObject);
+            return result.ParsedObject;
+        }
+
+        public StreamListItem GetUserWallStream() 
+        {
+            List<String> streamTypes = new List<String>();
+            streamTypes.Add("POST");
+            return GetUserStreams(streamTypes, false)[0];
+        }
+
+
+        #region Legacy Forwarders
+        public String getUserIMStreamId(long userId)
+        {
+            return GetUserIMStreamId(userId);
+        }
+
+        public string getUserListIM(List<long> userIdList)
+        {
+            return GetUserListIM(userIdList);
         }
 
         public RoomInfo createRoom(Room room)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            RoomInfo roomInfo = new RoomInfo();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.CREATEROOM;
-            HttpWebResponse resp = restRequestHandler.executeRequest(room, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
-            }
-            resp.Close();
-            return roomInfo;
+            return CreateRoom(room);
         }
 
-        public void addMemberToRoom(String streamId, long userId)
+        public void addMemberToRoom(string streamId, long userId)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            NumericId id = new NumericId();
-            id.id = userId;
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ADDMEMBER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-            }
-            resp.Close();
+            AddMemberToRoom(streamId, userId);
         }
 
-        public void removeMemberFromRoom(String streamId, long userId)
+        public void removeMemberFromRoom(string streamId, long userId)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            NumericId id = new NumericId();
-            id.id = userId;
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REMOVEMEMBER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-            }
-            resp.Close();
+            RemoveMemberFromRoom(streamId, userId);
         }
 
-        public RoomInfo getRoomInfo(String streamId)
+        public RoomInfo getRoomInfo(string streamId)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            RoomInfo roomInfo = new RoomInfo();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETROOMINFO.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
-            }
-            resp.Close();
-            return roomInfo;
+            return GetRoomInfo(streamId);
         }
 
-        public RoomInfo updateRoom(String streamId, Room room) 
+        public RoomInfo updateRoom(string streamId, Room room)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            RoomInfo roomInfo = new RoomInfo();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.UPDATEROOMINFO.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(room, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            //.post(Entity.entity(room, MediaType.APPLICATION_JSON));
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No user found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
-            }
-            resp.Close();
-            return roomInfo;
-         }
-
-    //TODO: CHECK WHY 404
-        public StreamInfo getStreamInfo(String streamId) 
-        {
-
-            SymConfig symConfig = botClient.getConfig();
-            StreamInfo streamInfo = new StreamInfo();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETSTREAMINFO.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No stream found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                streamInfo = JsonConvert.DeserializeObject<StreamInfo>(body);
-            }
-            resp.Close();
-            return streamInfo;
+            return UpdateRoom(streamId, room);
         }
 
-        public List<RoomMember> getRoomMembers(String streamId)
+        public StreamInfo getStreamInfo(string streamId) 
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            List<RoomMember> roomMembers = new List<RoomMember>();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETROOMMEMBERS.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.NoContent)
-            {
-                resp.Close();
-                throw new Exception("No stream found.");
-            }
-            else if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-                roomMembers = JsonConvert.DeserializeObject<List<RoomMember>>(body);
-            }
-            resp.Close();
-            return roomMembers;
-
-          }
-
-        public void activateRoom(String streamId)
-        {
-            setActiveRoom(streamId,true);
+            return GetStreamInfo(streamId);
         }
 
-        public void deactivateRoom(String streamId)
+        public List<RoomMember> getRoomMembers(string streamId)
         {
-            setActiveRoom(streamId,false);
+            return GetRoomMembers(streamId);
         }
 
-        //TODO: CHECK WHY 403
-        private void setActiveRoom(String streamId, Boolean active)
+        public void activateRoom(string streamId)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SETACTIVE.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                string body = restRequestHandler.ReadResponse(resp);
-            }
-            resp.Close();
+            ActivateRoom(streamId);
         }
 
-        public void promoteUserToOwner(String streamId, long userId) 
+        public void deactivateRoom(string streamId)
         {
-
-            SymConfig symConfig = botClient.getConfig();
-            NumericId id = new NumericId();
-            id.id = userId;
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.PROMOTEOWNER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            resp.Close();
-         }
-
-        public void demoteUserFromOwner(String streamId, long userId)
-        {
-            SymConfig symConfig = botClient.getConfig();
-            NumericId id = new NumericId();
-            id.id = userId;
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.DEMOTEOWNER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            resp.Close();
+            DeactivateRoom(streamId);
         }
 
-        //TODO: CHECK WHY 500
-        public RoomSearchResult searchRooms(RoomSearchQuery query, int skip, int limit)
+        public void promoteUserToOwner(string streamId, long userId)
         {
-            RoomSearchResult result = null;
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SEARCHROOMS;
-            if (skip > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&skip=" + skip;
-                }
-                else
-                {
-                    url = url + "?skip=" + skip;
-                }
-            }
-            if (limit > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&limit=" + limit;
-                }
-                else
-                {
-                    url = url + "?limit=" + limit;
-                }
-            }
-            if (query.labels == null)
-            {
-                query.labels = new List<String>();
-            }
-            HttpWebResponse resp = restRequestHandler.executeRequest(query, url, false, WebRequestMethods.Http.Post, symConfig, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            result = JsonConvert.DeserializeObject<RoomSearchResult>(body);
-            resp.Close();
-            return result;
-    }
+            PromoteUserToOwner(streamId, userId);
+        }
 
-    public List<StreamListItem> getUserStreams(List<String> streamTypes, Boolean includeInactiveStreams) 
-    {
-            List<Dictionary<String, String>> inputStreamTypes = new List<Dictionary<String, String>>();
-            if (streamTypes != null)
-            {
-                foreach (String type in streamTypes)
-                {
-                    Dictionary<String, String> streamTypesMap = new Dictionary<string, string>();
-                    streamTypesMap.Add("type", type);
-                    inputStreamTypes.Add(streamTypesMap);
-                }
-            }
+        public void demoteUserFromOwner(string streamId, long userId)
+        {
+            DemoteUserFromOwner(streamId, userId);
+        }
 
-            Dictionary<String, Object> input = new Dictionary<String, Object>();
-            input.Add("streamTypes", inputStreamTypes);
-            input.Add("includeInactiveStreams", includeInactiveStreams);
+        public RoomSearchResult searchRooms(RoomSearchQuery query, int? skip, int? limit)
+        {
+            return SearchRooms(query, skip, limit);
+        }
 
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.LISTUSERSTREAMS;
-            HttpWebResponse resp = restRequestHandler.executeRequest(input, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<StreamInfoList>(body);
+        public List<StreamListItem> getUserStreams(List<string> streamTypes = null, bool? includeInactiveStreams = null, int? skip = null, int? limit = null) 
+        {
+            return GetUserStreams();
         }
 
         public StreamListItem getUserWallStream() 
         {
-            List<String> streamTypes = new List<String>();
-                streamTypes.Add("POST");
-                return getUserStreams(streamTypes, false)[0];
-         }
-
+            return GetUserWallStream();
+        }
+        #endregion
      }
 }

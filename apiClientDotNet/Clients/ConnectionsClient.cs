@@ -1,181 +1,173 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
 using apiClientDotNet.Utils;
-using System.Net;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using Newtonsoft.Json;
 using apiClientDotNet.Clients.Constants;
-using apiClientDotNet.Clients;
 
 namespace apiClientDotNet.Clients
 {
-    public class ConnectionsClient
+    public class ConnectionsClient : ApiClient
     {
-        private ISymClient botClient;
-
         public ConnectionsClient(ISymClient client)
         {
-            botClient = client;
+            SymClient = client;
+        }
+        
+        public List<InboundConnectionRequest> GetPendingConnections()
+        {
+            return GetConnections();
         }
 
-        public List<InboundConnectionRequest> getPendingConnections()
+        public List<InboundConnectionRequest> GetInboundPendingConnections()
         {
-            return getConnections(null, null);
+            return GetConnections("PENDING_INCOMING");
         }
 
-        public List<InboundConnectionRequest> getInboundPendingConnections()
+        public List<InboundConnectionRequest> GetAllConnections()
         {
-            return getConnections("PENDING_INCOMING", null);
+            return GetConnections("ALL");
         }
 
-        public List<InboundConnectionRequest> getAllConnections()
+        public List<InboundConnectionRequest> GetAcceptedConnections()
         {
-            return getConnections("ALL", null);
+            return GetConnections("ACCEPTED");
         }
 
-        public List<InboundConnectionRequest> getAcceptedConnections()
+        public List<InboundConnectionRequest> GetRejectedConnections()
         {
-            return getConnections("ACCEPTED", null);
+            return GetConnections("REJECTED");
         }
 
-        public List<InboundConnectionRequest> getRejectedConnections()
+        public List<InboundConnectionRequest> GetConnections(string status = null, List<long> userIds = null)
         {
-            return getConnections("REJECTED", null);
-        }
-
-        public List<InboundConnectionRequest> getConnections(String status, List<long> userIds)
-        {
-            Boolean userList = false;
-            StringBuilder userIdList = new StringBuilder();
+            var requestParams = new QueryBuilder();
+            requestParams.AddParameter("status", status);
             if (userIds != null)
             {
-                if (userIds.Count != 0)
-                {
-                    userList = true;
-                    userIdList.Append(userIds[0]);
-                    for (int i = 1; i < userIds.Count; i++)
-                    {
-                        userIdList.Append("," + userIds[i]);
-                    }
-                }
+                requestParams.AddParameter("userIds", String.Join(",", userIds));
             }
+            var requestUri = PodConstants.ListConnections + requestParams.Query;
+            var result = ExecuteRequest<List<InboundConnectionRequest>>(HttpMethod.Get, new Uri(requestUri, UriKind.Relative));
+            return result.ParsedObject;
+        }
 
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETCONNECTIONS;
-
-
-            if (status != null)
+        public InboundConnectionRequest AcceptConnectionRequest(long userId)
+        {
+            var requestUri = new Uri(PodConstants.AcceptConnection, UriKind.Relative);
+            var user = new
             {
-                if (url.Contains("?"))
-                {
-                    url = url + "&status=" + status;
-                }
-                else
-                {
-                    url = url + "?status=" + status;
-                }
-            }
-            if (userList)
+                userId = userId
+            };
+            var result = ExecuteRequest<InboundConnectionRequest>(HttpMethod.Post, requestUri, user);
+            return result.ParsedObject;
+        }
+
+        public InboundConnectionRequest RejectConnectionRequest(long userId)
+        {
+            var requestUri = new Uri(PodConstants.RejectConnection, UriKind.Relative);
+            var user = new
             {
-                if (url.Contains("?"))
-                {
-                    url = url + "&userIds=" + userIdList.ToString();
-                }
-                else
-                {
-                    url = url + "?userIds=" + userIdList.ToString();
-                }
-            }
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<InboundConnectionRequestList>(body);
-
+                userId = userId
+            };
+            var result = ExecuteRequest<InboundConnectionRequest>(HttpMethod.Post, requestUri, user);
+            return result.ParsedObject;
         }
 
-        public InboundConnectionRequest acceptConnectionRequest(long userId)
+        public InboundConnectionRequest SendConnectionRequest(long userId)
         {
-            UserId userIdObject = new UserId();
-            userIdObject.setUserId(userId);
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ACCEPTCONNECTION;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
-           
+            var requestUri = new Uri(PodConstants.SendConnectionRequest, UriKind.Relative);
+            var user = new
+            {
+                userId = userId
+            };
+            var result = ExecuteRequest<InboundConnectionRequest>(HttpMethod.Post, requestUri, user);
+            return result.ParsedObject;
         }
 
-        public InboundConnectionRequest rejectConnectionRequest(long userId)
+        public InboundConnectionRequest GetConnectionRequestStatus(long userId)
         {
-            UserId userIdObject = new UserId();
-            userIdObject.setUserId(userId);
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REJECTCONNECTION;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
-            
+            var requestUri = new Uri(PodConstants.GetConnectionStatus.Replace("{userId}", userId.ToString()), UriKind.Relative);
+            var result = ExecuteRequest<InboundConnectionRequest>(HttpMethod.Get, requestUri);
+            return result.ParsedObject;
         }
 
-        public InboundConnectionRequest sendConnectionRequest(long userId)
+        public bool RemoveConnection(long userId)
         {
-            UserId userIdObject = new UserId();
-            userIdObject.setUserId(userId);
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SENDCONNECTIONREQUEST;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
-
-        }
-
-        public InboundConnectionRequest getConnectionRequestStatus(long userId)
-        {
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETCONNECTIONSTATUS.Replace("{userId}", userId.ToString());
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
-        }
-
-        public void removeConnection(long userId)
-        {
-            SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REMOVECONNECTION.Replace("{userId}", userId.ToString());
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            //string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
+            var requestUri = new Uri(PodConstants.RemoveConnection.Replace("{userId}", userId.ToString()), UriKind.Relative);
+            var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
+            return result.HttpResponse.IsSuccessStatusCode;
          }
 
 
-        private class UserId
+
+        #region Legacy Forwarders
+        [Obsolete("Method is deprecated, please use GetPendingConnections instead.")]
+        public List<InboundConnectionRequest> getPendingConnections()
         {
-            long userId;
-
-            public long getUserId()
-            {
-                return userId;
-            }
-
-            public void setUserId(long userId)
-            {
-                this.userId = userId;
-            }
+            return GetConnections();
         }
-            }
 
+        [Obsolete("Method is deprecated, please use GetInboundPendingConnections instead.")]
+        public List<InboundConnectionRequest> getInboundPendingConnections()
+        {
+            return GetConnections("PENDING_INCOMING");
+        }
+
+        [Obsolete("Method is deprecated, please use GetAllConnections instead.")]
+        public List<InboundConnectionRequest> getAllConnections()
+        {
+            return GetConnections("ALL");
+        }
+
+        [Obsolete("Method is deprecated, please use GetAcceptedConnections instead.")]
+        public List<InboundConnectionRequest> getAcceptedConnections()
+        {
+            return GetConnections("ACCEPTED");
+        }
+
+        [Obsolete("Method is deprecated, please use GetRejectedConnections instead.")]
+        public List<InboundConnectionRequest> getRejectedConnections()
+        {
+            return GetConnections("REJECTED");
+        }
+
+        [Obsolete("Method is deprecated, please use GetConnections instead.")]
+        public List<InboundConnectionRequest> getConnections(string status = null, List<long> userIds = null)
+        {
+            return GetConnections(status, userIds);
+        }
+        
+        [Obsolete("Method is deprecated, please use AcceptConnectionRequest instead.")]
+        public InboundConnectionRequest acceptConnectionRequest(long userId)
+        {
+            return AcceptConnectionRequest(userId);
+        }
+
+        [Obsolete("Method is deprecated, please use RejectConnectionRequest instead.")]
+        public InboundConnectionRequest rejectConnectionRequest(long userId)
+        {
+            return RejectConnectionRequest(userId);
+        }
+
+        [Obsolete("Method is deprecated, please use SendConnectionRequest instead.")]
+        public InboundConnectionRequest sendConnectionRequest(long userId)
+        {
+            return SendConnectionRequest(userId);
+        }
+
+        [Obsolete("Method is deprecated, please use GetConnectionRequestStatus instead.")]
+        public InboundConnectionRequest getConnectionRequestStatus(long userId)
+        {
+            return GetConnectionRequestStatus(userId);
+        }
+
+        [Obsolete("Method is deprecated, please use RemoveConnection instead.")]
+        public void removeConnection(long userId)
+        {
+            RemoveConnection(userId);
+        }
+        #endregion
+    }
 }
 
