@@ -3,6 +3,7 @@ using apiClientDotNet.Models;
 using System.Net.Http;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -59,7 +60,10 @@ namespace apiClientDotNet.Clients
             }
             else if (postData != null)
             {
-                var jsonString = JsonConvert.SerializeObject(postData);
+                var jsonString = JsonConvert.SerializeObject(postData, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
                 request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
             }
             if (optionalHeaders != null)
@@ -100,7 +104,7 @@ namespace apiClientDotNet.Clients
             try 
             {
                 Console.WriteLine(response.RequestMessage.RequestUri.OriginalString);
-                Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                Console.WriteLine(JToken.Parse(response.RequestMessage.Content.ReadAsStringAsync().Result).ToString(Formatting.Indented));
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     //logger.error("Client error occurred", error);
