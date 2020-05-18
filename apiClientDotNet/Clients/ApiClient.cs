@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+using apiClientDotNet.Clients.Constants;
 
 namespace apiClientDotNet.Clients
 {
@@ -51,21 +52,23 @@ namespace apiClientDotNet.Clients
 
         protected SymClientResponse<T> ExecuteRequest<T>(HttpMethod method, Uri requestUri, object postData = null, HttpRequestHeaders optionalHeaders = null) 
         {
-            T result;
-            var requestClient = DetermineHttpClient(requestUri);
-            var request = new HttpRequestMessage(method, requestUri);
-            if (postData is MultipartFormDataContent)
-            {
-                request.Content = (MultipartFormDataContent) postData;
-            }
-            else if (postData != null)
+            StringContent stringContent = null;
+            if (postData != null)
             {
                 var jsonString = JsonConvert.SerializeObject(postData, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-                request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                stringContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
             }
+            return ExecuteRequestContent<T>(method, requestUri, stringContent, optionalHeaders);
+        }
+
+        protected SymClientResponse<T> ExecuteRequestContent<T>(HttpMethod method, Uri requestUri, HttpContent postData = null, HttpRequestHeaders optionalHeaders = null) 
+        {
+            T result;
+            var requestClient = DetermineHttpClient(requestUri);
+            var request = new HttpRequestMessage(method, requestUri);
             if (optionalHeaders != null)
             {
                 foreach (var header in optionalHeaders)
@@ -88,11 +91,11 @@ namespace apiClientDotNet.Clients
 
         protected HttpClient DetermineHttpClient(Uri request) 
         {
-            if (request.OriginalString.ToLower().StartsWith("/pod"))
+            if (request.OriginalString.ToLower().StartsWith(PodConstants.PodPrefix + "/"))
             {
                 return PodRequestClient;
             }
-            if (request.OriginalString.ToLower().StartsWith("/agent"))
+            if (request.OriginalString.ToLower().StartsWith(AgentConstants.AgentPrefix + "/"))
             {
                 return AgentRequestClient;
             }

@@ -41,7 +41,7 @@ namespace apiClientDotNet
                     }
                 }
             }
-            var result = ExecuteRequest<InboundMessage>(HttpMethod.Post, requestUri, payload);
+            var result = ExecuteRequestContent<InboundMessage>(HttpMethod.Post, requestUri, payload);
             return result.ParsedObject;
         }
 
