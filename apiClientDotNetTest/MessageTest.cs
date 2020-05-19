@@ -40,13 +40,13 @@ namespace apiClientDotNetTest
             var streamClient = botClient.getStreamsClient();
             var roomSearchQuery = new RoomSearchQuery
             {
-                query = config.GetSection("test_room_name").Value,
-                active = true,
-                isPrivate = true
+                Query = config.GetSection("test_room_name").Value,
+                Active = true,
+                IsPrivate = true
             };
             var result = streamClient.searchRooms(roomSearchQuery, 0, 0);
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.count >= 1);
+            Assert.IsTrue(result.Count >= 1);
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace apiClientDotNetTest
             var userClient = botClient.getUsersClient();
             var user = userClient.getUserFromUsername(config.GetSection("test_username").Value);
             Assert.IsNotNull(user);
-            Assert.AreEqual(config.GetSection("test_displayname").Value, user.displayName);
+            Assert.AreEqual(config.GetSection("test_displayname").Value, user.DisplayName);
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace apiClientDotNetTest
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count >= 1);
 
-            MessageRoomTest(result[0].id);
+            MessageRoomTest(result[0].Id);
         }
 
         public void MessageRoomTest(string streamId)
@@ -83,17 +83,17 @@ namespace apiClientDotNetTest
             };
             var message = new OutboundMessage
             {
-                message = "<messageML>Hello world! From .NET SDK Integration Test.</messageML>"
+                Message = "<messageML>Hello world! From .NET SDK Integration Test.</messageML>"
             };
-            message.attachments = attachments;
+            message.Attachments = attachments;
             var stream = new apiClientDotNet.Models.Stream
             {
-                streamId = streamId
+                StreamId = streamId
             };
 
             var messageClient = new MessageClient(botClient);
-            var resp = messageClient.sendMessage(stream.streamId, message, false);
-            Assert.IsNotNull(resp.messageId);
+            var resp = messageClient.sendMessage(stream.StreamId, message, false);
+            Assert.IsNotNull(resp.MessageId);
         }
     }
 }

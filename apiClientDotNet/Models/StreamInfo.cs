@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
@@ -9,27 +6,27 @@ namespace apiClientDotNet.Models
     {
 
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("crossPod")]
-        public Boolean crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
         [JsonProperty("origin")]
-        public string origin { get; set; }
+        public string Origin { get; set; }
         
         [JsonProperty("active")]
-        public Boolean active { get; set; }
+        public bool Active { get; set; }
 
         [JsonProperty("lastMessageDate")]
-        public long lastMessageDate { get; set; }
+        public long LastMessageDate { get; set; }
 
         [JsonProperty("streamType")]
-        public StreamType streamType { get; set; }
+        public StreamType StreamType { get; set; }
 
         [JsonProperty("streamAttributes")]
-        public StreamAttributes streamAttributes { get; set; }
+        public StreamAttributes StreamAttributes { get; set; }
 
         [JsonProperty("roomAttributes")]
-        public RoomName roomAttributes { get; set; }
+        public RoomName RoomAttributes { get; set; }
     }
 }

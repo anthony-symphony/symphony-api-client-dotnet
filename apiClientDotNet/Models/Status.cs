@@ -1,11 +1,10 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
-    public class Status
+    public class StatusObject
     {
         [JsonProperty("status")]
-        public String status { get; set; }
+        public string Status { get; set; }
     }
 }

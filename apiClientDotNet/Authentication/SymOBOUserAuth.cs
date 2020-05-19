@@ -37,7 +37,7 @@ namespace apiClientDotNet.Authentication
             var response = AppAuth.GetAppAuthClient().PostAsync(requestPath, null).Result;
             if (response.IsSuccessStatusCode) 
             {
-                return JsonConvert.DeserializeObject<Token>(response.Content.ReadAsStringAsync().Result).token;
+                return JsonConvert.DeserializeObject<TokenObject>(response.Content.ReadAsStringAsync().Result).Token;
             }
             else 
             {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using apiClientDotNet.Models;
 using apiClientDotNet.Utils;
 using System.Net.Http;
-using Newtonsoft.Json;
 using apiClientDotNet.Clients.Constants;
 
 namespace apiClientDotNet.Clients
@@ -42,7 +41,7 @@ namespace apiClientDotNet.Clients
 
         public Signal UpdateSignal(Signal signal)
         {
-            var requestUri = new Uri(AgentConstants.UpdateSignal.Replace("{id}", signal.id), UriKind.Relative);
+            var requestUri = new Uri(AgentConstants.UpdateSignal.Replace("{id}", signal.Id), UriKind.Relative);
             var result = ExecuteRequest<Signal>(HttpMethod.Post, requestUri, signal);
             return result.ParsedObject;
         }
@@ -71,65 +70,14 @@ namespace apiClientDotNet.Clients
             return result.ParsedObject;
         }
 
-        public SignalSubscriberList GetSignalSubscribers(string id, int? skip, int? limit)
+        public List<SignalSubscriber> GetSignalSubscribers(string id, int? skip, int? limit)
         {
             var requestParams = new QueryBuilder();
             requestParams.AddParameter("skip", skip.ToString());
             requestParams.AddParameter("limit", limit.ToString());
             var requestUri = AgentConstants.GetSubscribers.Replace("{id}", id) + requestParams.Query;
-            var result = ExecuteRequest<SignalSubscriberList>(HttpMethod.Get, new Uri(requestUri, UriKind.Relative));
+            var result = ExecuteRequest<List<SignalSubscriber>>(HttpMethod.Get, new Uri(requestUri, UriKind.Relative));
             return result.ParsedObject;
         }
-
-        #region Legacy Forwarders
-
-        public List<Signal> listSignals(int? skip, int? limit)
-        {
-            return ListSignals(skip, limit);
-        }
-
-        public Signal getSignal(string id)
-        {
-            return GetSignal(id);
-        }
-
-        public Signal createSignal(Signal signal)
-        {
-            return CreateSignal(signal);
-        }
-
-        public void deleteSignal(string id)
-        {
-            DeleteSignal(id);
-        }
-
-        public Signal updateSignal(Signal signal)
-        {
-            return UpdateSignal(signal);
-        }
-
-        public SignalSubscriptionResult subscribeSignal(string id, bool self, List<long> uids, bool pushed)
-        {
-            if (self)
-            {
-                uids = null;
-            }
-            return SubscribeSignal(id, uids, pushed);
-        }
-
-        public SignalSubscriptionResult unsubscribeSignal(string id, bool self, List<long> uids) 
-        {
-            if (self)
-            {
-                uids = null;
-            }
-            return UnsubscribeSignal(id,uids);
-        }
-
-        public SignalSubscriberList getSignalSubscribers(String id, int? skip, int? limit) 
-        {
-            return GetSignalSubscribers(id, skip, limit);
-        }
-        #endregion
     }
 }

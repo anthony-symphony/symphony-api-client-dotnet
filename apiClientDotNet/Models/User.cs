@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class User
     {
         [JsonProperty("userId")]
-        public long userId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("firstName")]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
         [JsonProperty("lastName")]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [JsonProperty("displayName")]
-        public string displayName { get; set; }
+        public string DisplayName { get; set; }
 
         [JsonProperty("email")]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         [JsonProperty("username")]
-        public string username { get; set; }
+        public string Username { get; set; }
     }
 }

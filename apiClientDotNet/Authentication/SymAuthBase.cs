@@ -17,23 +17,23 @@ namespace apiClientDotNet.Authentication
 
         protected virtual void InitializeAuthClients() 
         {
-            var botCertificate = File.ReadAllBytes(SymConfig.botCertPath + SymConfig.botCertName + ".p12");
+            var botCertificate = File.ReadAllBytes(SymConfig.BotCertPath + SymConfig.BotCertName + ".p12");
             var sessionAuthRequestHandler = new HttpClientHandler();
-            if (!string.IsNullOrEmpty(SymConfig.sessionProxyURL)) {
-                sessionAuthRequestHandler.Proxy = RequestProxyBuilder.CreateWebProxy(SymConfig.sessionProxyURL, SymConfig.sessionProxyUsername, SymConfig.sessionProxyPassword);
+            if (!string.IsNullOrEmpty(SymConfig.SessionProxyURL)) {
+                sessionAuthRequestHandler.Proxy = RequestProxyBuilder.CreateWebProxy(SymConfig.SessionProxyURL, SymConfig.SessionProxyUsername, SymConfig.SessionProxyPassword);
             }
-            sessionAuthRequestHandler.ClientCertificates.Add(new X509Certificate2(botCertificate, SymConfig.botCertPassword));
+            sessionAuthRequestHandler.ClientCertificates.Add(new X509Certificate2(botCertificate, SymConfig.BotCertPassword));
             SessionAuthClient = new HttpClient(sessionAuthRequestHandler);
-            var sessionAuthBase = new UriBuilder("https", SymConfig.sessionAuthHost, SymConfig.sessionAuthPort);
+            var sessionAuthBase = new UriBuilder("https", SymConfig.SessionAuthHost, SymConfig.SessionAuthPort);
             SessionAuthClient.BaseAddress = sessionAuthBase.Uri;
 
             var keyAuthRequestHandler = new HttpClientHandler();
-            if (!string.IsNullOrEmpty(SymConfig.keyManagerProxyURL)) {
-                keyAuthRequestHandler.Proxy = RequestProxyBuilder.CreateWebProxy(SymConfig.keyManagerProxyURL, SymConfig.keyManagerProxyUsername, SymConfig.keyManagerProxyPassword);
+            if (!string.IsNullOrEmpty(SymConfig.KeyManagerProxyURL)) {
+                keyAuthRequestHandler.Proxy = RequestProxyBuilder.CreateWebProxy(SymConfig.KeyManagerProxyURL, SymConfig.KeyManagerProxyUsername, SymConfig.KeyManagerProxyPassword);
             }
-            keyAuthRequestHandler.ClientCertificates.Add(new X509Certificate2(botCertificate, SymConfig.botCertPassword));
+            keyAuthRequestHandler.ClientCertificates.Add(new X509Certificate2(botCertificate, SymConfig.BotCertPassword));
             KeyAuthClient = new HttpClient(keyAuthRequestHandler);
-            var keyAuthBase = new UriBuilder("https", SymConfig.keyAuthHost, SymConfig.keyAuthPort);
+            var keyAuthBase = new UriBuilder("https", SymConfig.KeyAuthHost, SymConfig.KeyAuthPort);
             KeyAuthClient.BaseAddress = keyAuthBase.Uri;
         }
 
@@ -53,41 +53,5 @@ namespace apiClientDotNet.Authentication
         public abstract string GetKeyManagerToken();
         public abstract void SetKeyManagerToken(string kmToken);
         public abstract void Logout();
-
-        #region Legacy Forwarders
-        public void authenticate()
-        {
-            Authenticate();
-        }
-        public void sessionAuthenticate()
-        {
-            SessionAuthenticate();
-        }
-
-        public string getSessionToken()
-        {
-            return GetSessionToken();
-        }
-        public void setSessionToken(string sessionToken)
-        {
-            SetSessionToken(sessionToken);
-        }
-        public void keyManagerAuthenticate()
-        {
-            KeyManagerAuthenticate();
-        }
-        public string getKeyManagerToken()
-        {
-            return GetKeyManagerToken();
-        }
-        public void setKeyManagerToken(string kmToken)
-        {
-            SetKeyManagerToken(kmToken);
-        }
-        public void logout()
-        {
-            Logout();
-        }
-        #endregion
     }
 }

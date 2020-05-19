@@ -33,7 +33,7 @@ namespace apiClientDotNet.Authentication
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                SessionToken = JsonConvert.DeserializeObject<Token>(result).token;
+                SessionToken = JsonConvert.DeserializeObject<TokenObject>(result).Token;
             }
             else 
             {
@@ -51,7 +51,7 @@ namespace apiClientDotNet.Authentication
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                KeyManagerToken = JsonConvert.DeserializeObject<Token>(result).token;
+                KeyManagerToken = JsonConvert.DeserializeObject<TokenObject>(result).Token;
             }
             else 
             {

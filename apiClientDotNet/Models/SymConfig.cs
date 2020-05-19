@@ -5,115 +5,115 @@ namespace apiClientDotNet.Models
     public class SymConfig
     {
         [JsonProperty("sessionAuthHost")]
-        public string sessionAuthHost { get; set; }
+        public string SessionAuthHost { get; set; }
 
         [JsonProperty("sessionAuthPort")]
-        public int sessionAuthPort { get; set; }
+        public int SessionAuthPort { get; set; }
 
         [JsonProperty("keyAuthHost")]
-        public string keyAuthHost { get; set; }
+        public string KeyAuthHost { get; set; }
 
         [JsonProperty("keyAuthPort")]
-        public int keyAuthPort { get; set; }
+        public int KeyAuthPort { get; set; }
 
         [JsonProperty("podHost")]
-        public string podHost { get; set; }
+        public string PodHost { get; set; }
 
         [JsonProperty("podPort")]
-        public int podPort { get; set; }
+        public int PodPort { get; set; }
 
         [JsonProperty("agentHost")]
-        public string agentHost { get; set; }
+        public string AgentHost { get; set; }
 
         [JsonProperty("agentPort")]
-        public int agentPort { get; set; }
+        public int AgentPort { get; set; }
 
         [JsonProperty("botCertPath")]
-        public string botCertPath { get; set; }
+        public string BotCertPath { get; set; }
 
         [JsonProperty("botCertName")]
-        public string botCertName { get; set; }
+        public string BotCertName { get; set; }
 
         [JsonProperty("botCertPassword")]
-        public string botCertPassword { get; set; }
+        public string BotCertPassword { get; set; }
 
         [JsonProperty("botEmailAddress")]
-        public string botEmailAddress { get; set; }
+        public string BotEmailAddress { get; set; }
 
         [JsonProperty("appCertPath")]
-        public string appCertPath { get; set; }
+        public string AppCertPath { get; set; }
 
         [JsonProperty("appCertName")]
-        public string appCertName { get; set; }
+        public string AppCertName { get; set; }
 
         [JsonProperty("appCertPassword")]
-        public string appCertPassword { get; set; }
+        public string AppCertPassword { get; set; }
 
         [JsonProperty("authTokenRefreshPeriod")]
-        public string authTokenRefreshPeriod { get; set; }
+        public string AuthTokenRefreshPeriod { get; set; }
 
         [JsonProperty("botPrivateKeyPath")]
-        public string botPrivateKeyPath { get; set; }
+        public string BotPrivateKeyPath { get; set; }
 
         [JsonProperty("botPrivateKeyName")]
-        public string botPrivateKeyName { get; set; }
+        public string BotPrivateKeyName { get; set; }
 
         [JsonProperty("botUsername")]
-        public string botUsername { get; set; }
+        public string BotUsername { get; set; }
 
         #region Global Proxy
         [JsonProperty("proxyURL")]
-        public string proxyURL { get; set; }
+        public string ProxyURL { get; set; }
 
         [JsonProperty("proxyUsername")]
-        public string proxyUsername { get; set; }
+        public string ProxyUsername { get; set; }
 
         [JsonProperty("proxyPassword")]
-        public string proxyPassword { get; set; }
+        public string ProxyPassword { get; set; }
         #endregion
 
         #region Session proxy
         [JsonProperty("sessionProxyURL")]
-        public string sessionProxyURL { get; set; }
+        public string SessionProxyURL { get; set; }
 
         [JsonProperty("sessionProxyUsername")]
-        public string sessionProxyUsername { get; set; }
+        public string SessionProxyUsername { get; set; }
 
         [JsonProperty("sessionProxyPassword")]
-        public string sessionProxyPassword { get; set; }
+        public string SessionProxyPassword { get; set; }
         #endregion
 
         #region Key Manager proxy
         [JsonProperty("keyManagerProxyURL")]
-        public string keyManagerProxyURL { get; set; }
+        public string KeyManagerProxyURL { get; set; }
 
         [JsonProperty("keyManagerProxyUsername")]
-        public string keyManagerProxyUsername { get; set; }
+        public string KeyManagerProxyUsername { get; set; }
 
         [JsonProperty("keyManagerProxyPassword")]
-        public string keyManagerProxyPassword { get; set; }
+        public string KeyManagerProxyPassword { get; set; }
         #endregion
 
         #region Pod proxy
         [JsonProperty("podProxyURL")]
-        public string podProxyURL { get; set; }
+        public string PodProxyURL { get; set; }
 
         [JsonProperty("podProxyUsername")]
-        public string podProxyUsername { get; set; }
+        public string PodProxyUsername { get; set; }
 
         [JsonProperty("podProxyPassword")]
-        public string podProxyPassword { get; set; }
+        public string PodProxyPassword { get; set; }
         #endregion
 
         #region Agent proxy
         [JsonProperty("agentProxyURL")]
-        public string agentProxyURL { get; set; }
+        public string AgentProxyURL { get; set; }
 
         [JsonProperty("agentProxyUsername")]
-        public string agentProxyUsername { get; set; }
+        public string AgentProxyUsername { get; set; }
 
         [JsonProperty("agentProxyPassword")]
-        public string agentProxyPassword { get; set; }
+        public string AgentProxyPassword { get; set; }
         #endregion
     }
 }

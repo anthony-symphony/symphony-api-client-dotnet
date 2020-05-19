@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,15 +6,15 @@ namespace apiClientDotNet.Models
     public class InboundImportMessage
     {
         [JsonProperty("messageId")]
-        public String messageId { get; set; }
+        public string MessageId { get; set; }
 
         [JsonProperty("originatingSystemId")]
-        public String originatingSystemId { get; set; }
+        public string OriginatingSystemId { get; set; }
 
         [JsonProperty("originalMessageId")]
-        public String originalMessageId { get; set; }
+        public string OriginalMessageId { get; set; }
 
         [JsonProperty("diagnostic")]
-        public String diagnostic { get; set; }
+        public string Diagnostic { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,15 +6,15 @@ namespace apiClientDotNet.Models
     public class SignalSubscriptionResult
     {
         [JsonProperty("requestedSubscription")]
-        public int requestedSubscription { get; set; }
+        public int RequestedSubscription { get; set; }
 
         [JsonProperty("successfulSubscription")]
-        public int successfulSubscription { get; set; }
+        public int SuccessfulSubscription { get; set; }
 
         [JsonProperty("failedSubscription")]
-        public int failedSubscription { get; set; }
+        public int FailedSubscription { get; set; }
 
         [JsonProperty("subscriptionErrors")]
-        public List<long> subscriptionErrors { get; set; }
+        public List<long> SubscriptionErrors { get; set; }
     }
 }

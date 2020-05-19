@@ -25,51 +25,5 @@ namespace apiClientDotNet.Models
 
         [JsonProperty("endDate")]
         public long EndDate { get; set; }
-
-
-        #region Legacy Forwarders
-        public List<string> streamTypes 
-        { 
-            get { return StreamTypes; } 
-            set { StreamTypes = value; } 
-        }
-
-        public string scope 
-        { 
-            get { return Scope; } 
-            set { Scope = value; } 
-        }
-
-        public string origin 
-        { 
-            get { return Origin; } 
-            set { Origin = value; }
-        }
-
-        public string status 
-        { 
-            get { return Status; } 
-            set { Status = value; }
-        }
-
-        public string privacy 
-        { 
-            get { return Privacy; } 
-            set { Privacy = value; }
-        }
-
-        public long startDate 
-        { 
-            get { return StartDate; }
-            set { StartDate = value; }
-        }
-
-        public long endDate 
-        { 
-            get { return EndDate; }
-            set { EndDate = value;}
-        }
-
-        #endregion
     }
 }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class RoomInfo
     {
         [JsonProperty("roomAttributes")]
-        public Room roomAttributes { get; set; }
+        public Room RoomAttributes { get; set; }
 
         [JsonProperty("roomSystemInfo")]
-        public RoomSystemInfo roomSystemInfo { get; set; }
-
+        public RoomSystemInfo RoomSystemInfo { get; set; }
     }
 }

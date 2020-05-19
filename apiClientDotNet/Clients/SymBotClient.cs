@@ -57,17 +57,5 @@ namespace apiClientDotNet
             }
             return BotUserInfo;
         }
-
-        
-        #region Legacy Forwarders
-        public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
-        {
-            return InitBot(config, symBotAuth);
-        }
-        public DatafeedEventsService getDatafeedEventsService()
-        {
-            return GetDatafeedEventsService();
-        }
-        #endregion
     }
 }

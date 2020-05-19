@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class StringId
     {
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
     }
 }

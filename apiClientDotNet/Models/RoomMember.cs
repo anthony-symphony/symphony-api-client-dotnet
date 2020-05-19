@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class RoomMember
     {
         [JsonProperty("id")]
-        public long id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("owner")]
-        public Boolean owner { get; set; }
+        public bool Owner { get; set; }
 
         [JsonProperty("joinDate")]
-        public long joinDate { get; set; }
+        public long JoinDate { get; set; }
 
     }
 }

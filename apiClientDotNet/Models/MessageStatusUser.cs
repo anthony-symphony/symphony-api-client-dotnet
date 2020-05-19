@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class MessageStatusUser
     {
         [JsonProperty("read")]
-        public string read { get; set; }
+        public string Read { get; set; }
 
         [JsonProperty("firstName")]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
         [JsonProperty("lastName")]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [JsonProperty("email")]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         [JsonProperty("username")]
-        public string username { get; set; }
+        public string Username { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
     }
 }

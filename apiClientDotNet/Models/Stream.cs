@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,22 +6,22 @@ namespace apiClientDotNet.Models
     public class Stream
     {
         [JsonProperty("streamId")]
-        public string streamId { get; set; }
+        public string StreamId { get; set; }
 
         [JsonProperty("streamType")]
-        public string streamType { get; set; }
+        public string StreamType { get; set; }
 
         [JsonProperty("roomName")]
-        public string roomName { get; set; }
+        public string RoomName { get; set; }
 
         [JsonProperty("members")]
-        public List<User> members { get; set; }
+        public List<User> Members { get; set; }
 
         [JsonProperty("external")]
-        public bool external { get; set; }
+        public bool External { get; set; }
 
         [JsonProperty("crossPod")]
-        public bool crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
     }
 }

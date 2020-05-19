@@ -44,14 +44,14 @@ namespace apiClientDotNetTest
 
             Assert.IsNotNull(listUserInfo);
             Assert.AreEqual(3, listUserInfo.Count);
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[0].displayName));
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[0].username));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[0].DisplayName));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[0].Username));
 
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[1].displayName));
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[1].username));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[1].DisplayName));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[1].Username));
 
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[2].displayName));
-            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[2].username));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[2].DisplayName));
+            Assert.IsFalse(String.IsNullOrEmpty(listUserInfo[2].Username));
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace apiClientDotNetTest
             UserSearchResult searchUsers = sut.searchUsers(query, false, 0, 10, null);
 
             Assert.IsNotNull(searchUsers);
-            Assert.IsTrue(searchUsers.users.Count >= 1);
+            Assert.IsTrue(searchUsers.Users.Count >= 1);
         }
     }
 }

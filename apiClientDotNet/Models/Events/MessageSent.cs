@@ -8,6 +8,6 @@ namespace apiClientDotNet.Models.Events
     public class MessageSent
     {
         [JsonProperty("message")]
-        public Message message { get; set; }
+        public InboundMessage message { get; set; }
     }
 }

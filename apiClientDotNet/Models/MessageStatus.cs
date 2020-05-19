@@ -8,12 +8,12 @@ namespace apiClientDotNet.Models
     public class MessageStatus
     {
         [JsonProperty("read")]
-        public List<MessageStatusUser> read { get; set; }
+        public List<MessageStatusUser> Read { get; set; }
 
         [JsonProperty("delivered")]
-        public List<MessageStatusUser> delivered { get; set; }
+        public List<MessageStatusUser> Delivered { get; set; }
 
         [JsonProperty("sent")]
-        public List<MessageStatusUser> sent { get; set; }
+        public List<MessageStatusUser> Sent { get; set; }
     }
 }

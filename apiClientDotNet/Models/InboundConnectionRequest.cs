@@ -8,18 +8,18 @@ namespace apiClientDotNet.Models
     public class InboundConnectionRequest
     {
         [JsonProperty("userId")]
-        public long userId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("status")]
-        public string status { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("firstRequestedAt")]
-        public long firstRequestedAt { get; set; }
+        public long FirstRequestedAt { get; set; }
 
         [JsonProperty("updatedAt")]
-        public long updatedAt { get; set; }
+        public long UpdatedAt { get; set; }
 
         [JsonProperty("requestCounter")]
-        public int requestCounter { get; set; }
+        public int RequestCounter { get; set; }
     }
 }

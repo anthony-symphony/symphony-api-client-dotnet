@@ -17,12 +17,12 @@ namespace apiClientDotNetTest
             var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfig = symConfigLoader.loadFromFile(configPath);
             Assert.IsNotNull(symConfig);
-            Assert.IsNotNull(symConfig.agentHost);
-            Assert.IsNotNull(symConfig.keyAuthHost);
-            Assert.IsNotNull(symConfig.podHost);
-            Assert.IsNotNull(symConfig.botEmailAddress);
-            Assert.IsNotNull(symConfig.botPrivateKeyName);
-            Assert.IsNotNull(symConfig.botUsername);
+            Assert.IsNotNull(symConfig.AgentHost);
+            Assert.IsNotNull(symConfig.KeyAuthHost);
+            Assert.IsNotNull(symConfig.PodHost);
+            Assert.IsNotNull(symConfig.BotEmailAddress);
+            Assert.IsNotNull(symConfig.BotPrivateKeyName);
+            Assert.IsNotNull(symConfig.BotUsername);
         }
     }
 }

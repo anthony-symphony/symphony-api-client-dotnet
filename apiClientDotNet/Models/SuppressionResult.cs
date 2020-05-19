@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class SuppressionResult
     {
         [JsonProperty("messageId")]
-        public String messageId { get; set; }
+        public string MessageId { get; set; }
 
         [JsonProperty("suppressed")]
-        public Boolean suppressed { get; set; }
+        public bool Suppressed { get; set; }
 
         [JsonProperty("suppressionDate")]
-        public long suppressionDate { get; set; }
+        public long SuppressionDate { get; set; }
     }
 }

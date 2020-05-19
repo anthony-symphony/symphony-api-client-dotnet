@@ -6,46 +6,46 @@ namespace apiClientDotNet.Models
     public class UserInfo
     {
         [JsonProperty("id")]
-        public long id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("firstName")]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
         [JsonProperty("lastName")]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [JsonProperty("displayName")]
-        public string displayName { get; set; }
+        public string DisplayName { get; set; }
 
         [JsonProperty("title")]
-        public string title { get; set; }
+        public string Title { get; set; }
 
         [JsonProperty("company")]
-        public string company { get; set; }
+        public string Company { get; set; }
 
         [JsonProperty("username")]
-        public string username { get; set; }
+        public string Username { get; set; }
 
         [JsonProperty("location")]
-        public string location { get; set; }
+        public string Location { get; set; }
 
         [JsonProperty("workPhoneNumber")]
-        public string workPhoneNumber { get; set; }
+        public string WorkPhoneNumber { get; set; }
 
         [JsonProperty("mobilePhoneNumber")]
-        public string mobilePhoneNumber { get; set; }
+        public string MobilePhoneNumber { get; set; }
 
         [JsonProperty("jobFunction")]
-        public string jobFunction { get; set; }
+        public string JobFunction { get; set; }
 
         [JsonProperty("department")]
-        public string department { get; set; }
+        public string Department { get; set; }
 
         [JsonProperty("division")]
-        public string division { get; set; }
+        public string Division { get; set; }
 
         [JsonProperty("avatars")]
-        public List<Avatar> avatars { get; set; }
+        public List<Avatar> Avatars { get; set; }
 
         [JsonProperty("emailAddress")]
         public string EmailAddress { get; set; }

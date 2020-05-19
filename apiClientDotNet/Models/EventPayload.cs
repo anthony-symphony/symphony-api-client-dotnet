@@ -50,7 +50,7 @@ namespace apiClientDotNet.Models
         [JsonProperty("messageSuppressed")]
         public MessageSuppressed messageSuppressed { get; set; }
 
-	[JsonProperty("symphonyElementsAction")]
-	public SymphonyElementsAction symphonyElementsAction { get; set; }
+        [JsonProperty("symphonyElementsAction")]
+        public SymphonyElementsAction symphonyElementsAction { get; set; }
     }
 }

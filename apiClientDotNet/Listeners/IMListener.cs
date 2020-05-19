@@ -4,7 +4,7 @@ namespace apiClientDotNet.Listeners
 {
     public interface IMListener
     {
-        void onIMMessage(Message message);
+        void onIMMessage(InboundMessage message);
         void onIMCreated(Stream stream);
     }
 }

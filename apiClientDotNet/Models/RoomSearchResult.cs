@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,19 +6,19 @@ namespace apiClientDotNet.Models
     public class RoomSearchResult
     {
         [JsonProperty("count")]
-        public int count { get; set; }
+        public int Count { get; set; }
 
         [JsonProperty("skip")]
-        public int skip { get; set; }
+        public int Skip { get; set; }
 
         [JsonProperty("limit")]
-        public int limit { get; set; }
+        public int Limit { get; set; }
 
         [JsonProperty("query")]
-        public RoomSearchQuery query { get; set; }
+        public RoomSearchQuery Query { get; set; }
 
         [JsonProperty("rooms")]
-        public List<RoomInfo> rooms { get; set; }
+        public List<RoomInfo> Rooms { get; set; }
 
     }
 }

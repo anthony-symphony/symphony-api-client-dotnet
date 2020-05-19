@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class UserFilter
     {
         [JsonProperty("title")]
-        public String title { get; set; }
+        public string Title { get; set; }
 
         [JsonProperty("location")]
-        public String location { get; set; }
+        public string Location { get; set; }
 
         [JsonProperty("company")]
-        public String company { get; set; }
+        public string Company { get; set; }
 
     }
 }

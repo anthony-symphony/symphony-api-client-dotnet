@@ -20,17 +20,17 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(AgentConstants.CreateMessage.Replace("{sid}", streamId), UriKind.Relative);
             var payload = new MultipartFormDataContent();
-            if (message.message != null)
+            if (message.Message != null)
             {
-                payload.Add(new StringContent(message.message), "message");
+                payload.Add(new StringContent(message.Message), "message");
             }
-            if (message.data != null)
+            if (message.Data != null)
             {
-                payload.Add(new StringContent(message.data), "data");
+                payload.Add(new StringContent(message.Data), "data");
             }
-            if (message.attachments != null && message.attachments.Count > 0)
+            if (message.Attachments != null && message.Attachments.Count > 0)
             {
-                foreach(var attachment in message.attachments)
+                foreach(var attachment in message.Attachments)
                 {
                     using(var memoryStream = new MemoryStream())
                     {
@@ -48,8 +48,8 @@ namespace apiClientDotNet
         public InboundMessage ForwardMessage(string streamId, InboundMessage message)
         {
             OutboundMessage outboundMessage = new OutboundMessage();
-            outboundMessage.message = message.message;
-            outboundMessage.data = message.data;
+            outboundMessage.Message = message.Message;
+            outboundMessage.Data = message.Data;
             /*
             outboundMessage.attachments = new List<FileStream>();
             var inboundMessageAttachments = GetMessageAttachments(message);
@@ -96,13 +96,13 @@ namespace apiClientDotNet
         public List<FileAttachment> GetMessageAttachments(InboundMessage message)
         {
             List<FileAttachment> result = new List<FileAttachment>();
-            List<Attachment> messageAttachments = message.attachments;
+            List<Attachment> messageAttachments = message.Attachments;
             foreach (var attachment in messageAttachments)
             {
                 var fileAttachment = new FileAttachment();
-                fileAttachment.fileName = attachment.name;
-                fileAttachment.size = attachment.size;
-                fileAttachment.fileContent = GetAttachment(message.stream.streamId, attachment.id, message.messageId);
+                fileAttachment.FileName = attachment.Name;
+                fileAttachment.Size = attachment.Size;
+                fileAttachment.FileContent = GetAttachment(message.Stream.StreamId, attachment.Id, message.MessageId);
                 result.Add(fileAttachment);
             }
             return result;
@@ -114,162 +114,5 @@ namespace apiClientDotNet
             var result = ExecuteRequest<MessageStatus>(HttpMethod.Get, requestUri);
             return result.ParsedObject;
         }
-
-
-        #region Legacy Forwarders
-        public InboundMessage sendMessage(string streamId, OutboundMessage message, bool appendTags)
-        {
-            return SendMessage(streamId, message,appendTags);
-        }
-
-        public InboundMessage forwardMessage(string streamId, InboundMessage message)
-        {
-            return ForwardMessage(streamId,message);
-        }
-
-        public List<InboundMessage> getMessagesFromStream(string streamId, long since, int? skip = null, int? limit = null)
-        {
-            return getMessagesFromStream(streamId,since,skip,limit);
-        }
-
-        public byte[] getAttachment(string streamId, string attachmentId, string messageId)
-        {
-            return GetAttachment(streamId,attachmentId,messageId);
-        }
-
-        public List<FileAttachment> getMessageAttachments(InboundMessage message)
-        {
-            return GetMessageAttachments(message);
-        }
-
-        public MessageStatus getMessageStatus(string messageId)
-        {
-            return GetMessageStatus(messageId);
-        }
-        #endregion
-        //////////////////////
-       /* public InboundMessageList messageSearch(Dictionary<String, String> query, int skip, int limit, Boolean orderAscending)
-            {
-
-            InboundMessageList result = null;
-            SymConfig symConfig = botClient.getConfig();
-
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.SEARCHMESSAGES;
-
-
-            if (skip > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&skip=" + skip;
-                } else
-                {
-                    url = url + "?skip=" + skip;
-                }
-            }
-            if (limit > 0)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&limit=" + limit;
-                }
-                else
-                {
-                    url = url + "?limit=" + limit;
-                }
-            }
-            if (orderAscending)
-            {
-                if (url.Contains("?"))
-                {
-                    url = url + "&sortDir=ASC";
-                }
-                else
-                {
-                    url = url + "?sortDir=ASC";
-                }
-            }
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-            InboundMessageList inboundMessages = JsonConvert.DeserializeObject<InboundMessageList>(body);
-
-            return inboundMessages;
-        }
-
-   /* public InboundImportMessageList importMessages(OutboundImportMessageList messageList) 
-    {
-            SymConfig symConfig = botClient.getConfig();
-
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.MESSAGEIMPORT;
-
-            Response response
-                    = botClient.getAgentClient().target(CommonConstants.HTTPSPREFIX + botClient.getConfig().getAgentHost() + ":" + botClient.getConfig().getAgentPort())
-                    .path(AgentConstants.MESSAGEIMPORT)
-                    .request(MediaType.APPLICATION_JSON)
-                    .header("sessionToken",botClient.getSymAuth().getSessionToken())
-                    .header("keyManagerToken", botClient.getSymAuth().getKmToken())
-                    .post(Entity.entity(messageList,MediaType.APPLICATION_JSON));
-            if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
-            try
-            {
-                handleError(response, botClient);
-            }
-            catch (UnauthorizedException ex)
-            {
-                return importMessages(messageList);
-            }
-            return null;
-        } else {
-            return response.readEntity(InboundImportMessageList.class);
-            }
-        }
-
-    public SuppressionResult suppressMessage(String id) throws SymClientException
-{
-    Response response
-                = botClient.getAgentClient().target(CommonConstants.HTTPSPREFIX + botClient.getConfig().getPodHost() + ":" + botClient.getConfig().getPodPort())
-                .path(PodConstants.MESSAGESUPPRESS.replace("{id}",id))
-                .request(MediaType.APPLICATION_JSON)
-                .header("sessionToken",botClient.getSymAuth().getSessionToken())
-                .post(null);
-        if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
-        try
-        {
-            handleError(response, botClient);
-        }
-        catch (UnauthorizedException ex)
-        {
-            return suppressMessage(id);
-        }
-        return null;
-    } else {
-        return response.readEntity(SuppressionResult.class);
-        }
-    }
-
-    public InboundShare shareContent(String streamId, OutboundShare shareContent) throws SymClientException
-{
-    Map<String,Object> map = new HashMap<>();
-        map.put("content",shareContent);
-        Response response
-                = botClient.getAgentClient().target(CommonConstants.HTTPSPREFIX + botClient.getConfig().getAgentHost() + ":" + botClient.getConfig().getAgentPort())
-                .path(AgentConstants.SHARE.replace("{sid}", streamId))
-                .request(MediaType.APPLICATION_JSON)
-                .header("sessionToken", botClient.getSymAuth().getSessionToken())
-                .header("keyManagerToken", botClient.getSymAuth().getKmToken())
-                .post(Entity.entity(map, MediaType.APPLICATION_JSON));
-        if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
-            try {
-                handleError(response, botClient);
-            } catch (UnauthorizedException ex){
-                return shareContent(streamId, shareContent);
-            }
-            return null;
-        }
-            return response.readEntity(InboundShare.class);
-    }*/
-
     }
 }

@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class StreamListItem
     {
         [JsonProperty("id")]
-        public String id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("crossPod")]
-        public Boolean crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
         [JsonProperty("active")]
-        public Boolean active { get; set; }
+        public bool Active { get; set; }
 
         [JsonProperty("streamType")]
-        public TypeObject streamType { get; set; }
+        public TypeObject StreamType { get; set; }
 
         [JsonProperty("streamAttributes")]
-        public StreamAttributes streamAttributes { get; set; }
+        public StreamAttributes StreamAttributes { get; set; }
 
         [JsonProperty("roomAttributes")]
-        public RoomName roomAttributes { get; set; }
+        public RoomName RoomAttributes { get; set; }
 
     }
 }

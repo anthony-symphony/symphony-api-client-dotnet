@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
@@ -9,6 +6,6 @@ namespace apiClientDotNet.Models
     {
 
         [JsonProperty("user")]
-        public User user { get; set; }
+        public User User { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(PodConstants.GetIm, UriKind.Relative);
             var result = ExecuteRequest<StringId>(HttpMethod.Post, requestUri, userIdList);
-            return result.ParsedObject.id;
+            return result.ParsedObject.Id;
         }
 
         public RoomInfo CreateRoom(Room room)
@@ -41,7 +41,7 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(PodConstants.AddMember.Replace("{id}", streamId), UriKind.Relative);
             var id = new NumericId();
-            id.id = userId;
+            id.Id = userId;
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, id);
             return result.HttpResponse.IsSuccessStatusCode;
         }
@@ -50,7 +50,7 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(PodConstants.RemoveMember.Replace("{id}", streamId), UriKind.Relative);
             var id = new NumericId();
-            id.id = userId;
+            id.Id = userId;
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, id);
             return result.HttpResponse.IsSuccessStatusCode;
         }
@@ -106,7 +106,7 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(PodConstants.PromoteOwner.Replace("{id}", streamId), UriKind.Relative);
             NumericId id = new NumericId();
-            id.id = userId;
+            id.Id = userId;
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
             return result.HttpResponse.IsSuccessStatusCode;
         }
@@ -115,7 +115,7 @@ namespace apiClientDotNet
         {
             var requestUri = new Uri(PodConstants.DemoteOwner.Replace("{id}", streamId), UriKind.Relative);
             NumericId id = new NumericId();
-            id.id = userId;
+            id.Id = userId;
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri);
             return result.HttpResponse.IsSuccessStatusCode;
         }
@@ -151,88 +151,5 @@ namespace apiClientDotNet
             streamTypes.Add("POST");
             return GetUserStreams(streamTypes, false)[0];
         }
-
-
-        #region Legacy Forwarders
-        public String getUserIMStreamId(long userId)
-        {
-            return GetUserIMStreamId(userId);
-        }
-
-        public string getUserListIM(List<long> userIdList)
-        {
-            return GetUserListIM(userIdList);
-        }
-
-        public RoomInfo createRoom(Room room)
-        {
-            return CreateRoom(room);
-        }
-
-        public void addMemberToRoom(string streamId, long userId)
-        {
-            AddMemberToRoom(streamId, userId);
-        }
-
-        public void removeMemberFromRoom(string streamId, long userId)
-        {
-            RemoveMemberFromRoom(streamId, userId);
-        }
-
-        public RoomInfo getRoomInfo(string streamId)
-        {
-            return GetRoomInfo(streamId);
-        }
-
-        public RoomInfo updateRoom(string streamId, Room room)
-        {
-            return UpdateRoom(streamId, room);
-        }
-
-        public StreamInfo getStreamInfo(string streamId) 
-        {
-            return GetStreamInfo(streamId);
-        }
-
-        public List<RoomMember> getRoomMembers(string streamId)
-        {
-            return GetRoomMembers(streamId);
-        }
-
-        public void activateRoom(string streamId)
-        {
-            ActivateRoom(streamId);
-        }
-
-        public void deactivateRoom(string streamId)
-        {
-            DeactivateRoom(streamId);
-        }
-
-        public void promoteUserToOwner(string streamId, long userId)
-        {
-            PromoteUserToOwner(streamId, userId);
-        }
-
-        public void demoteUserFromOwner(string streamId, long userId)
-        {
-            DemoteUserFromOwner(streamId, userId);
-        }
-
-        public RoomSearchResult searchRooms(RoomSearchQuery query, int? skip, int? limit)
-        {
-            return SearchRooms(query, skip, limit);
-        }
-
-        public List<StreamListItem> getUserStreams(List<string> streamTypes = null, bool? includeInactiveStreams = null, int? skip = null, int? limit = null) 
-        {
-            return GetUserStreams();
-        }
-
-        public StreamListItem getUserWallStream() 
-        {
-            return GetUserWallStream();
-        }
-        #endregion
-     }
+    }
 }

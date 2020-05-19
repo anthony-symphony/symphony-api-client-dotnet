@@ -5,7 +5,7 @@ namespace apiClientDotNet.Listeners
 {
     public interface RoomListener
     {
-        void onRoomMessage(Message message);
+        void onRoomMessage(InboundMessage message);
         void onRoomCreated(RoomCreated roomCreated);
         void onRoomDeactivated(RoomDeactivated roomDeactivated);
         void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner);

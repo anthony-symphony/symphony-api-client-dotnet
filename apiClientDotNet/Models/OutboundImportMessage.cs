@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class OutboundImportMessage
     {
         [JsonProperty("message")]
-        public String message { get; set; }
+        public string Message { get; set; }
 
         [JsonProperty("data")]
-        public String data { get; set; }
+        public string Data { get; set; }
 
         [JsonProperty("intendedMessageTimestamp")]
-        public long intendedMessageTimestamp { get; set; }
+        public long IntendedMessageTimestamp { get; set; }
 
         [JsonProperty("intendedMessageFromUserId")]
-        public long intendedMessageFromUserId { get; set; }
+        public long IntendedMessageFromUserId { get; set; }
 
         [JsonProperty("originatingSystemId")]
-        public String originatingSystemId { get; set; }
+        public string OriginatingSystemId { get; set; }
 
         [JsonProperty("originalMessageId")]
-        public String originalMessageId { get; set; }
+        public string OriginalMessageId { get; set; }
 
         [JsonProperty("streamId")]
-        public String streamId { get; set; }
+        public string StreamId { get; set; }
     }
 }

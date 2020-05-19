@@ -9,13 +9,13 @@ namespace apiClientDotNet.Models
     public class OutboundMessage
     {
         [JsonProperty("message")]
-        public string message { get; set; }
+        public string Message { get; set; }
 
         [JsonProperty("data")]
-        public string data { get; set; }
+        public string Data { get; set; }
 
         [JsonProperty("attachments")]
-        public List<FileStream> attachments { get; set; }
+        public List<FileStream> Attachments { get; set; }
 
     }
 }

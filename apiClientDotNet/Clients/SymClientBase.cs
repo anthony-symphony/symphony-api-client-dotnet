@@ -146,10 +146,10 @@ namespace apiClientDotNet.Clients
         protected void LoadBaseUrls() 
         {
             BaseUrls = new Dictionary<SymphonyRequestType, string>();
-            BaseUrls[SymphonyRequestType.SessionAuth] = new UriBuilder("https", SymConfig.sessionAuthHost, SymConfig.sessionAuthPort).ToString();
-            BaseUrls[SymphonyRequestType.KeyManager] = new UriBuilder("https",SymConfig.keyAuthHost, SymConfig.keyAuthPort).ToString();
-            BaseUrls[SymphonyRequestType.Pod] = new UriBuilder("https", SymConfig.podHost, SymConfig.podPort).ToString();
-            BaseUrls[SymphonyRequestType.Agent] = new UriBuilder("https", SymConfig.agentHost, SymConfig.agentPort).ToString();
+            BaseUrls[SymphonyRequestType.SessionAuth] = new UriBuilder("https", SymConfig.SessionAuthHost, SymConfig.SessionAuthPort).ToString();
+            BaseUrls[SymphonyRequestType.KeyManager] = new UriBuilder("https",SymConfig.KeyAuthHost, SymConfig.KeyAuthPort).ToString();
+            BaseUrls[SymphonyRequestType.Pod] = new UriBuilder("https", SymConfig.PodHost, SymConfig.PodPort).ToString();
+            BaseUrls[SymphonyRequestType.Agent] = new UriBuilder("https", SymConfig.AgentHost, SymConfig.AgentPort).ToString();
             BaseUrls[SymphonyRequestType.Default] = String.Empty;
 
         }
@@ -157,45 +157,45 @@ namespace apiClientDotNet.Clients
         protected void IntializeRequestProxies() 
         {
             RequestProxies = new Dictionary<SymphonyRequestType, WebProxy>();
-            if (!string.IsNullOrEmpty(SymConfig.proxyURL)) 
+            if (!string.IsNullOrEmpty(SymConfig.ProxyURL)) 
             {
-                RequestProxies[SymphonyRequestType.Default] = RequestProxyBuilder.CreateWebProxy(SymConfig.proxyURL, SymConfig.proxyUsername, SymConfig.proxyPassword);
+                RequestProxies[SymphonyRequestType.Default] = RequestProxyBuilder.CreateWebProxy(SymConfig.ProxyURL, SymConfig.ProxyUsername, SymConfig.ProxyPassword);
             }
             else 
             {
                 RequestProxies[SymphonyRequestType.Default] = null;
             }
 
-            if (!string.IsNullOrEmpty(SymConfig.sessionProxyURL)) 
+            if (!string.IsNullOrEmpty(SymConfig.SessionProxyURL)) 
             {
-                RequestProxies[SymphonyRequestType.SessionAuth] = RequestProxyBuilder.CreateWebProxy(SymConfig.sessionProxyURL, SymConfig.sessionProxyUsername, SymConfig.sessionProxyPassword);
+                RequestProxies[SymphonyRequestType.SessionAuth] = RequestProxyBuilder.CreateWebProxy(SymConfig.SessionProxyURL, SymConfig.SessionProxyUsername, SymConfig.SessionProxyPassword);
             }
             else 
             {
                 RequestProxies[SymphonyRequestType.SessionAuth] = RequestProxies[SymphonyRequestType.Default];
             }
 
-            if (!string.IsNullOrEmpty(SymConfig.keyManagerProxyURL)) 
+            if (!string.IsNullOrEmpty(SymConfig.KeyManagerProxyURL)) 
             {
-                RequestProxies[SymphonyRequestType.KeyManager] = RequestProxyBuilder.CreateWebProxy(SymConfig.keyManagerProxyURL, SymConfig.keyManagerProxyUsername, SymConfig.keyManagerProxyPassword);
+                RequestProxies[SymphonyRequestType.KeyManager] = RequestProxyBuilder.CreateWebProxy(SymConfig.KeyManagerProxyURL, SymConfig.KeyManagerProxyUsername, SymConfig.KeyManagerProxyPassword);
             }
             else 
             {
                 RequestProxies[SymphonyRequestType.KeyManager] = RequestProxies[SymphonyRequestType.Default];
             }
 
-            if (!string.IsNullOrEmpty(SymConfig.podProxyURL)) 
+            if (!string.IsNullOrEmpty(SymConfig.PodProxyURL)) 
             {
-                RequestProxies[SymphonyRequestType.Pod] = RequestProxyBuilder.CreateWebProxy(SymConfig.podProxyURL, SymConfig.podProxyUsername, SymConfig.podProxyPassword);
+                RequestProxies[SymphonyRequestType.Pod] = RequestProxyBuilder.CreateWebProxy(SymConfig.PodProxyURL, SymConfig.PodProxyUsername, SymConfig.PodProxyPassword);
             }
             else 
             {
                 RequestProxies[SymphonyRequestType.Pod] = RequestProxies[SymphonyRequestType.Default];
             }
 
-            if (!string.IsNullOrEmpty(SymConfig.agentProxyURL)) 
+            if (!string.IsNullOrEmpty(SymConfig.AgentProxyURL)) 
             {
-                RequestProxies[SymphonyRequestType.Agent] = RequestProxyBuilder.CreateWebProxy(SymConfig.agentProxyURL, SymConfig.agentProxyUsername, SymConfig.agentProxyPassword);
+                RequestProxies[SymphonyRequestType.Agent] = RequestProxyBuilder.CreateWebProxy(SymConfig.AgentProxyURL, SymConfig.AgentProxyUsername, SymConfig.AgentProxyPassword);
             }
             else 
             {
@@ -242,49 +242,5 @@ namespace apiClientDotNet.Clients
             RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Add("sessionToken", SymAuth.GetSessionToken());
             RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Add("keyManagerToken", SymAuth.GetKeyManagerToken());
         }
-
-
-
-        #region Legacy Forwarders        
-        public MessageClient getMessagesClient()
-        {
-            return GetMessagesClient();
-        }
-
-        public SymConfig getConfig()
-        {
-            return GetConfig();
-        }
-
-        public ISymAuth getSymAuth()
-        {
-            return GetSymAuth();
-        }
-
-        public StreamClient getStreamsClient()
-        {
-            return GetStreamsClient();
-        }
-
-        public PresenceClient getPresenceClient()
-        {
-            return GetPresenceClient();
-        }
-
-        public UserClient getUsersClient()
-        {
-            return GetUsersClient();
-        }
-
-        public ConnectionsClient getConnectionsClient()
-        {
-            return GetConnectionsClient();
-        }
-
-        public SignalsClient getSignalsClient()
-        {
-            return GetSignalsClient();
-        }
-        #endregion
     }
 }

@@ -16,7 +16,7 @@ namespace apiClientDotNet
                 {
                     String json = sr.ReadToEnd();
                     symConfig  = JsonConvert.DeserializeObject<SymConfig>(json);
-                    Console.WriteLine(symConfig.sessionAuthHost);
+                    Console.WriteLine(symConfig.SessionAuthHost);
                 }
             }
             catch (Exception e)

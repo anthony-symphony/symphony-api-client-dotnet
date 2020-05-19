@@ -15,7 +15,7 @@ namespace apiClientDotNet.Clients
             SymClient = client;        
         }
 
-        public List<InboundImportMessage> ImportMessages (OutboundImportMessageList messageList) 
+        public List<InboundImportMessage> ImportMessages (List<OutboundImportMessage> messageList) 
         {
             var requestUri = new Uri(AgentConstants.MessageImport, UriKind.Relative);
             var result = ExecuteRequest<List<InboundImportMessage>>(HttpMethod.Post, requestUri, messageList);
@@ -104,11 +104,11 @@ namespace apiClientDotNet.Clients
         public string GetUserStatus(long userId)
         {
             var requestUri = new Uri(PodConstants.AdminGetUserStatus.Replace("{id}", userId.ToString()), UriKind.Relative);
-            var result = ExecuteRequest<Status>(HttpMethod.Get, requestUri);
-            return result.ParsedObject.status;
+            var result = ExecuteRequest<StatusObject>(HttpMethod.Get, requestUri);
+            return result.ParsedObject.Status;
         }
 
-        public bool UpdateUserStatus(long userId, Status updatedStatus)
+        public bool UpdateUserStatus(long userId, StatusObject updatedStatus)
         {
             var requestUri = new Uri(PodConstants.AdminUpdateUserStatus.Replace("{id}", userId.ToString()), UriKind.Relative);
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, updatedStatus);

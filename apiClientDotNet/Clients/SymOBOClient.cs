@@ -19,10 +19,5 @@ namespace apiClientDotNet.Clients
             SymConfig = config;
             InitializeBaseClient();
         }
-
-        public static SymOBOClient initOBOClient(SymConfig config, ISymAuth symAuth)
-        {
-            return InitOBOClient(config,symAuth);
-        }
     }
 }

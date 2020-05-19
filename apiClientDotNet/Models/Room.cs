@@ -8,37 +8,37 @@ namespace apiClientDotNet.Models
     public class Room
     {
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("description")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("membersCanInvite")]
-        public Boolean membersCanInvite { get; set; }
+        public bool MembersCanInvite { get; set; }
 
         [JsonProperty("discoverable")]
-        public Boolean discoverable { get; set; }
+        public bool Discoverable { get; set; }
 
         [JsonProperty("public")]
-        public Boolean isPublic { get; set; }
+        public bool IsPublic { get; set; }
 
         [JsonProperty("readOnly")]
-        public Boolean readOnly { get; set; }
+        public bool ReadOnly { get; set; }
 
         [JsonProperty("copyProtected")]
-        public Boolean copyProtected { get; set; }
+        public bool CopyProtected { get; set; }
 
         [JsonProperty("crossPod")]
-        public Boolean crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
         [JsonProperty("viewHistory")]
-        public Boolean viewHistory { get; set; }
+        public bool ViewHistory { get; set; }
 
         [JsonProperty("multiLateralRoom")]
-        public Boolean multiLateralRoom { get; set; }
+        public bool MultiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
-        public List<Keyword> keywords { get; set; }
+        public List<Keyword> Keywords { get; set; }
 
     }
 }

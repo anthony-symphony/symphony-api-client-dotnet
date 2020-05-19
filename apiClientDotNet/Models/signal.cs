@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class Signal
     {
         [JsonProperty("id")]
-        public String id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public String name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("query")]
-        public String query { get; set; }
+        public string Query { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         [JsonProperty("companyWide")]
-        public Boolean companyWide { get; set; }
+        public bool CompanyWide { get; set; }
 
         [JsonProperty("visibleOnProfile")]
-        public Boolean visibleOnProfile { get; set; }
+        public bool VisibleOnProfile { get; set; }
     }
 }

@@ -8,9 +8,9 @@ namespace apiClientDotNet.Models.Events
     public class SharedPost
     {
         [JsonProperty("message")]
-        public Message message { get; set; }
+        public InboundMessage message { get; set; }
 
         [JsonProperty("sharedMessage")]
-        public Message sharedMessage { get; set; }
+        public InboundMessage sharedMessage { get; set; }
     }
 }

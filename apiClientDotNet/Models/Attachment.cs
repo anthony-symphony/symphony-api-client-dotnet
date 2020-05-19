@@ -8,15 +8,15 @@ namespace apiClientDotNet.Models
     public class Attachment
     {
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("size")]
-        public long size { get; set; }
+        public long Size { get; set; }
 
         [JsonProperty("image")]
-        public ImageInfo image { get; set; }
+        public ImageInfo Image { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace apiClientDotNetTest
 
     public class BotLogic : RoomListener
     {
-        public void onRoomMessage(Message message)
+        public void onRoomMessage(InboundMessage message)
          {
-            Console.Write(message.message);
+            Console.Write(message.Message);
         }
         public void onRoomCreated(RoomCreated roomCreated) { }
         public void onRoomDeactivated(RoomDeactivated roomDeactivated) { }

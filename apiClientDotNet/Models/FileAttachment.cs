@@ -8,13 +8,13 @@ namespace apiClientDotNet.Models
     public class FileAttachment
     {
         [JsonProperty("fileContent")]
-        public byte[] fileContent { get; set; }
+        public byte[] FileContent { get; set; }
 
         [JsonProperty("fileName")]
-        public string fileName { get; set; }
+        public string FileName { get; set; }
 
         [JsonProperty("size")]
-        public long size { get; set; }
+        public long Size { get; set; }
 
     }
 }

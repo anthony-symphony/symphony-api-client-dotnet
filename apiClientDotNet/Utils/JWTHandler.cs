@@ -21,7 +21,7 @@ namespace apiClientDotNet.Utils
 
             var payload = new JwtPayload
             {
-                { "sub", config.botUsername },
+                { "sub", config.BotUsername },
                 { "exp", ToUtcSeconds(expirationTime) }
             };
 
@@ -38,7 +38,7 @@ namespace apiClientDotNet.Utils
         private AsymmetricKeyParameter parseSecret(SymConfig config)
         {
             AsymmetricCipherKeyPair keyPair;
-            using (var reader = File.OpenText(config.botPrivateKeyPath + config.botPrivateKeyName)) // file containing RSA PKCS1 private key
+            using (var reader = File.OpenText(config.BotPrivateKeyPath + config.BotPrivateKeyName)) // file containing RSA PKCS1 private key
             {
                 keyPair = (AsymmetricCipherKeyPair)new PemReader(reader).ReadObject();
             }

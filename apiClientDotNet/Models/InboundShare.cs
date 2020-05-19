@@ -8,21 +8,21 @@ namespace apiClientDotNet.Models
     public class InboundShare
     {
         [JsonProperty("id")]
-        public String id { get; set; }
+        public String Id { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         [JsonProperty("v2messageType")]
-        public String v2messageType { get; set; }
+        public String V2messageType { get; set; }
 
         [JsonProperty("streamId")]
-        public String streamId { get; set; }
+        public String StreamId { get; set; }
 
         [JsonProperty("message")]
-        public String message { get; set; }
+        public String Message { get; set; }
 
         [JsonProperty("userId")]
-        public long userId { get; set; }
+        public long UserId { get; set; }
     }
 }

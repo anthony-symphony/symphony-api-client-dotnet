@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using apiClientDotNet.Models.Events;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class DatafeedEvent
     {
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         [JsonProperty("type")]
-        public string type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("initiator")]
-        public Initiator initiator { get; set; }
+        public Initiator Initiator { get; set; }
 
         [JsonProperty("diagnostic")]
-        public string diagnostic { get; set; }
+        public string Diagnositc { get; set; }
 
         [JsonProperty("payload")]
-        public EventPayload payload { get; set; }
+        public EventPayload Payload { get; set; }
 
     }
 }

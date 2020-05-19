@@ -67,14 +67,14 @@ namespace apiClientDotNetTest
                 // Send to that stream a messages
                 var message = new OutboundMessage
                 {
-                    message = "<messageML>Hello world! From .NET SDK Integration Test.</messageML>"
+                    Message = "<messageML>Hello world! From .NET SDK Integration Test.</messageML>"
                 };
                 var stream = new apiClientDotNet.Models.Stream
                 {
-                    streamId = result[0].id
+                    StreamId = result[0].Id
                 };
                 var messageClient = new MessageClient(botClientTwo);
-                messageClient.sendMessage(stream.streamId, message, false);
+                messageClient.sendMessage(stream.StreamId, message, false);
             }, TaskCreationOptions.AttachedToParent);
 
             task.Start();
@@ -88,7 +88,7 @@ namespace apiClientDotNetTest
                 this.datafeedEventsService = datafeedEventsService;
             }
 
-            public void onRoomMessage(Message message)
+            public void onRoomMessage(InboundMessage message)
             {
                 datafeedEventsService.stopGettingEventsFromDatafeed();
                 Assert.IsNotNull(message);

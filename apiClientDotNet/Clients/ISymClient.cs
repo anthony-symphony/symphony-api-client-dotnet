@@ -24,22 +24,5 @@ namespace apiClientDotNet.Clients
         HttpClient GetPodHttpClient();
         HttpClient GetAgentHttpClient();
         HttpClient GetDefaultHttpClient();
-
-
-        #region Legacy Forwarders        
-        SymConfig getConfig();
- 
-        ISymAuth getSymAuth();
-
-        MessageClient getMessagesClient();
-
-        StreamClient getStreamsClient();
-
-        PresenceClient getPresenceClient();
-
-        UserClient getUsersClient();
-
-        ConnectionsClient getConnectionsClient();
-        #endregion
     }
 }

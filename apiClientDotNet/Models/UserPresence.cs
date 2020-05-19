@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class UserPresence
     {
         [JsonProperty("category")]
-        public string category { get; set; }
+        public string Category { get; set; }
 
         [JsonProperty("userId")]
-        public long userId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
     }
 }

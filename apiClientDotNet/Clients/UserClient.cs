@@ -33,7 +33,7 @@ namespace apiClientDotNet.Clients
             queryBuilder.AddParameter("local", local);
             var requestUri = new Uri(PodConstants.GetUsersV3 + queryBuilder.Query, UriKind.Relative);
             var result = ExecuteRequest<UserInfoList>(HttpMethod.Get, requestUri);
-            return result.ParsedObject.users;
+            return result.ParsedObject.Users;
         }
 
         public List<UserInfo> GetUserFromEmail(string email, bool? local) 
@@ -92,44 +92,5 @@ namespace apiClientDotNet.Clients
             var result = ExecuteRequest<UserInfo>(HttpMethod.Get, requestUri);
             return result.ParsedObject;
         }
-
-
-        #region Legacy Forwarders
-        public UserInfo getUserFromUsername(string username) 
-        {
-            return GetUserFromUsername(username);
-        }
-        public List<UserInfo> getUserFromId(long id, bool? local) {
-            return GetUsersV3(new List<long> {id}, null, null, local);
-        }
-
-        public List<UserInfo> getUserFromEmail(string email, bool? local)
-        {
-            return GetUsersV3(null, new List<string> {email}, null, local);
-        }
-
-        public List<UserInfo> getUsersFromIdList(List<long> idList, bool? local) {
-            return GetUsersById(idList, local);
-        }
-
-        public List<UserInfo> getUsersFromEmailList(List<string> emailList, bool? local) {
-            return getUsersV3(emailList, null, local);
-        }
-
-        public List<UserInfo> getUsersV3(List<string> emailList, List<long> idList, bool? local) 
-        { 
-            return GetUsersV3(idList, emailList, null, local);
-        }
-
-        public UserSearchResult searchUsers(string query, bool? local, int? skip, int? limit, UserFilter userFilter)
-        {
-            return SearchUsers(query, userFilter, local, skip, limit);
-        }
-
-        public UserInfo getSessionUser()
-        {
-            return GetSessionUser();
-        }
-        #endregion
     }
 }

@@ -8,9 +8,9 @@ namespace apiClientDotNet.Models
     public class ImageInfo
     {
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("dimension")]
-        public int dimension { get; set; }
+        public int Dimension { get; set; }
     }
 }

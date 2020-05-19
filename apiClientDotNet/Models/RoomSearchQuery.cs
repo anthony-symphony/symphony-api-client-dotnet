@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.ComponentModel;
 
 namespace apiClientDotNet.Models
 {
     public class RoomSearchQuery
     {
         [JsonProperty("query")]
-        public String query { get; set; }
+        public string Query { get; set; }
 
         [JsonProperty("labels")]
-        public List<String> labels { get; set; }
+        public List<string> Labels { get; set; }
 
         [JsonProperty("active")]
-        public Boolean? active { get; set; }
+        public bool? Active { get; set; }
 
         [JsonProperty("private")]
-        public Boolean? isPrivate { get; set; }
+        public bool? IsPrivate { get; set; }
 
         [JsonProperty("creator")]
-        public NumericId creator { get; set; }
+        public NumericId Creator { get; set; }
 
         [JsonProperty("owner")]
-        public NumericId owner { get; set; }
+        public NumericId Owner { get; set; }
 
         [JsonProperty("member")]
-        public NumericId member { get; set; }
+        public NumericId Member { get; set; }
     }
 }

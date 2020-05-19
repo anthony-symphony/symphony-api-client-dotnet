@@ -88,14 +88,14 @@ namespace apiClientDotNet.Services
         {
             foreach (DatafeedEvent eventv4 in datafeedEvents)
             {
-                if(eventv4.initiator.user.userId != BotClient.GetBotUserInfo().id)
+                if(eventv4.Initiator.User.UserId != BotClient.GetBotUserInfo().Id)
                 {
-                    switch (eventv4.type)
+                    switch (eventv4.Type)
                     {
                         case "MESSAGESENT":
 
-                            MessageSent messageSent = eventv4.payload.messageSent;
-                            if (messageSent.message.stream.streamType.Equals("ROOM"))
+                            MessageSent messageSent = eventv4.Payload.messageSent;
+                            if (messageSent.message.Stream.StreamType.Equals("ROOM"))
                             {
                                 foreach (RoomListener listener in RoomListeners)
                                 {
@@ -114,7 +114,7 @@ namespace apiClientDotNet.Services
 
                             foreach (IMListener listeners in IMListeners)
                             {
-                                listeners.onIMCreated(eventv4.payload.instantMessageCreated.stream);
+                                listeners.onIMCreated(eventv4.Payload.instantMessageCreated.stream);
                             }
                             break;
 
@@ -122,7 +122,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomCreated(eventv4.payload.roomCreated);
+                                listener.onRoomCreated(eventv4.Payload.roomCreated);
                             }
                             break;
 
@@ -130,7 +130,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomUpdated(eventv4.payload.roomUpdated);
+                                listener.onRoomUpdated(eventv4.Payload.roomUpdated);
                             }
                             break;
 
@@ -138,7 +138,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomDeactivated(eventv4.payload.roomDeactivated);
+                                listener.onRoomDeactivated(eventv4.Payload.roomDeactivated);
                             }
                             break;
 
@@ -146,7 +146,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomReactivated(eventv4.payload.roomReactivated.stream);
+                                listener.onRoomReactivated(eventv4.Payload.roomReactivated.stream);
                             }
                             break;
 
@@ -154,7 +154,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onUserJoinedRoom(eventv4.payload.userJoinedRoom);
+                                listener.onUserJoinedRoom(eventv4.Payload.userJoinedRoom);
                             }
                             break;
 
@@ -162,7 +162,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onUserLeftRoom(eventv4.payload.userLeftRoom);
+                                listener.onUserLeftRoom(eventv4.Payload.userLeftRoom);
                             }
                             break;
 
@@ -170,7 +170,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomMemberPromotedToOwner(eventv4.payload.roomMemberPromotedToOwner);
+                                listener.onRoomMemberPromotedToOwner(eventv4.Payload.roomMemberPromotedToOwner);
                             }
                             break;
 
@@ -178,7 +178,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomMemberDemotedFromOwner(eventv4.payload.roomMemberDemotedFromOwner);
+                                listener.onRoomMemberDemotedFromOwner(eventv4.Payload.roomMemberDemotedFromOwner);
                             }
                             break;
 
@@ -186,7 +186,7 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.onConnectionAccepted(eventv4.payload.connectionAccepted.fromUser);
+                                listener.onConnectionAccepted(eventv4.Payload.connectionAccepted.fromUser);
                             }
                             break;
 
@@ -194,18 +194,18 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.onConnectionRequested(eventv4.payload.connectionRequested.toUser);
+                                listener.onConnectionRequested(eventv4.Payload.connectionRequested.toUser);
                             }
                             break;
 
 			            case "SYMPHONYELEMENTSACTION":
-                            var StreamID = eventv4.payload.symphonyElementsAction.formStream.streamId.ToString();
+                            var StreamID = eventv4.Payload.symphonyElementsAction.formStream.StreamId.ToString();
                             StreamID = StreamID.Replace("=","");
                             StreamID = StreamID.Replace("/","_");
                             StreamID = StreamID.Replace("+","-");
 
-                            SymphonyElementsAction symphonyElementsAction = eventv4.payload.symphonyElementsAction;
-			                User user = eventv4.initiator.user;
+                            SymphonyElementsAction symphonyElementsAction = eventv4.Payload.symphonyElementsAction;
+			                User user = eventv4.Initiator.User;
                             foreach (ElementsActionListener listener in ElementsActionListeners)
                             {
                                 listener.onFormMessage(user, StreamID, symphonyElementsAction);

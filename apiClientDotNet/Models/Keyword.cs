@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
     public class Keyword
     {
         [JsonProperty("key")]
-        public string key { get; set; }
+        public string Key { get; set; }
 
         [JsonProperty("value")]
-        public string value { get; set; }
+        public string Value { get; set; }
     }
 }

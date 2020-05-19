@@ -25,7 +25,7 @@ namespace apiClientDotNet.Clients
         {
             var requestUri = new Uri(PodConstants.SetPresence, UriKind.Relative);
             UserPresence newStatus = new UserPresence();
-            newStatus.category = status;
+            newStatus.Category = status;
             var result = ExecuteRequest<UserPresence>(HttpMethod.Post, requestUri, newStatus);
             return result.ParsedObject;
         }
@@ -36,23 +36,5 @@ namespace apiClientDotNet.Clients
             var result = ExecuteRequest<SimpleResponse>(HttpMethod.Post, requestUri, userIds);
             return result.HttpResponse.IsSuccessStatusCode;
         }
-
-        #region Legacy Forwarders
-
-        public UserPresence getUserPresence(long userId, bool local)
-        {
-            return GetUserPresence(userId, local);
-        }
-
-        public UserPresence setPresence(string status)
-        {
-            return SetPresence(status);
-        }
-
-        public void registerInterestExtUser(List<long> userIds) 
-        {
-            RegisterInterestExtUser(userIds);
-        }
-        #endregion
     }
 }

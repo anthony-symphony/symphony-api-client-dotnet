@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,42 +6,42 @@ namespace apiClientDotNet.Models
     public class InboundMessage
     {
         [JsonProperty("messageId")]
-        public string messageId { get; set; }
+        public string MessageId { get; set; }
 
         [JsonProperty("timestamp")]
-        public long timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         [JsonProperty("message")]
-        public string message { get; set; }
+        public string Message { get; set; }
 
         [JsonProperty("data")]
-        public string data { get; set; }
+        public string Data { get; set; }
 
         [JsonProperty("attachments")]
-        public List<Attachment> attachments { get; set; }
+        public List<Attachment> Attachments { get; set; }
 
         [JsonProperty("user")]
-        public User user { get; set; }
+        public User User { get; set; }
 
         [JsonProperty("stream")]
-        public Stream stream { get; set; }
+        public Stream Stream { get; set; }
 
         [JsonProperty("externalRecipients")]
-        public Boolean externalRecipients { get; set; }
+        public bool ExternalRecipients { get; set; }
 
         [JsonProperty("diagnostic")]
-        public string diagnostic { get; set; }
+        public string Diagnostic { get; set; }
 
         [JsonProperty("userAgent")]
-        public string userAgent { get; set; }
+        public string UserAgent { get; set; }
 
         [JsonProperty("originalFormat")]
-        public string originalFormat { get; set; }
+        public string OriginalFormat { get; set; }
 
         [JsonProperty("messageText")]
-        public string messageText { get; set; }
+        public string MessageText { get; set; }
 
         [JsonProperty("url")]
-        public string url { get; set; }
+        public string Url { get; set; }
     }
 }

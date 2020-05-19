@@ -8,9 +8,9 @@ namespace apiClientDotNet.Models
     public class Avatar
     {
         [JsonProperty("size")]
-        public string size{ get; set; }
+        public string Size{ get; set; }
 
         [JsonProperty("url")]
-        public string url { get; set; }
+        public string Url { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace apiClientDotNet.Authentication
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                SessionToken = JsonConvert.DeserializeObject<Token>(result).token;
+                SessionToken = JsonConvert.DeserializeObject<TokenObject>(result).Token;
             }
             else 
             {
@@ -57,7 +57,7 @@ namespace apiClientDotNet.Authentication
 
         public override void Authenticate()
         {
-            sessionAuthenticate();
+            SessionAuthenticate();
         }
 
         public override void KeyManagerAuthenticate() {}
@@ -71,16 +71,6 @@ namespace apiClientDotNet.Authentication
         public override void Logout()
         {
             throw new NotImplementedException();
-        }
-
-        public SymOBOUserAuth getUserAuth(string username) 
-        {
-            return GetUserAuth(username);
-        }
-
-        public SymOBOUserAuth getUserAuth(long uid) 
-        {
-            return GetUserAuth(uid);
         }
     }
 }

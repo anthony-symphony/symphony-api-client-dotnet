@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -8,7 +6,7 @@ namespace apiClientDotNet.Models
     public class UserInfoList
     {
         [JsonProperty("users")]
-        public List<UserInfo> users { get; set; }
+        public List<UserInfo> Users { get; set; }
 
     }
 }

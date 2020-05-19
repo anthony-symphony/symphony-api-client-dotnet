@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -9,43 +7,43 @@ namespace apiClientDotNet.Models
     {
 
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("description")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("creatorUser")]
-        public User creatorUser { get; set; }
+        public User CreatorUser { get; set; }
 
         [JsonProperty("createdDate")]
-        public long createdDate { get; set; }
+        public long CreatedDate { get; set; }
 
         [JsonProperty("external")]
-        public bool external { get; set; }
+        public bool External { get; set; }
 
         [JsonProperty("crossPod")]
-        public bool crossPod { get; set; }
+        public bool CrossPod { get; set; }
 
         [JsonProperty("isPublic")]
-        public bool isPublic { get; set; }
+        public bool IsPublic { get; set; }
 
         [JsonProperty("copyProtected")]
-        public bool copyProtected { get; set; }
+        public bool CopyProtected { get; set; }
 
         [JsonProperty("readOnly")]
-        public bool readOnly { get; set; }
+        public bool ReadOnly { get; set; }
 
         [JsonProperty("discoverable")]
-        public bool discoverable { get; set; }
+        public bool Discoverable { get; set; }
 
         [JsonProperty("membersCanInvite")]
-        public bool copyPrmembersCanInviteotected { get; set; }
+        public bool MembersCanInvite { get; set; }
 
         [JsonProperty("keywords")]
-        public List<Keyword> keywords { get; set; }
+        public List<Keyword> Keywords { get; set; }
 
         [JsonProperty("canViewHistory")]
-        public bool canViewHistory { get; set; }
+        public bool CanViewHistory { get; set; }
 
     }
 }
