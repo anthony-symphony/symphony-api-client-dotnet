@@ -30,8 +30,8 @@ namespace apiClientDotNetTest
             var configPathOne = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfigOne = symConfigLoader.loadFromFile(configPathOne);
             var botAuthOne = new SymBotRSAAuth(symConfigOne);
-            botAuthOne.authenticate();
-            var botClientOne = SymBotClient.initBot(symConfigOne, botAuthOne);
+            botAuthOne.Authenticate();
+            var botClientOne = SymBotClient.InitBot(symConfigOne, botAuthOne);
 
             // create data feed with bot One
             var datafeedEventsServiceBotOne = new DatafeedEventsService(botClientOne);
@@ -54,16 +54,16 @@ namespace apiClientDotNetTest
                 var configPathTwo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdevTwo.json");
                 var symConfigTwo = symConfigLoader.loadFromFile(configPathTwo);
                 var botAuthTwo = new SymBotRSAAuth(symConfigTwo);
-                botAuthTwo.authenticate();
-                var botClientTwo = SymBotClient.initBot(symConfigTwo, botAuthTwo);
+                botAuthTwo.Authenticate();
+                var botClientTwo = SymBotClient.InitBot(symConfigTwo, botAuthTwo);
 
                 // Find one BOT stream id
-                var streamClient = botClientTwo.getStreamsClient();
+                var streamClient = botClientTwo.GetStreamsClient();
                 var streamTypes = new List<string>
                 {
                     "ROOM"
                 };
-                var result = streamClient.getUserStreams(streamTypes, false);
+                var result = streamClient.GetUserStreams(streamTypes, false);
                 // Send to that stream a messages
                 var message = new OutboundMessage
                 {
@@ -74,7 +74,7 @@ namespace apiClientDotNetTest
                     StreamId = result[0].Id
                 };
                 var messageClient = new MessageClient(botClientTwo);
-                messageClient.sendMessage(stream.StreamId, message, false);
+                messageClient.SendMessage(stream.StreamId, message, false);
             }, TaskCreationOptions.AttachedToParent);
 
             task.Start();
@@ -88,19 +88,19 @@ namespace apiClientDotNetTest
                 this.datafeedEventsService = datafeedEventsService;
             }
 
-            public void onRoomMessage(InboundMessage message)
+            public void OnRoomMessage(InboundMessage message)
             {
                 datafeedEventsService.stopGettingEventsFromDatafeed();
                 Assert.IsNotNull(message);
             }
-            public void onRoomCreated(RoomCreated roomCreated) { }
-            public void onRoomDeactivated(RoomDeactivated roomDeactivated) { }
-            public void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) { }
-            public void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) { }
-            public void onRoomReactivated(apiClientDotNet.Models.Stream stream) { }
-            public void onRoomUpdated(RoomUpdated roomUpdated) { }
-            public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) { }
-            public void onUserLeftRoom(UserLeftRoom userLeftRoom) { }
+            public void OnRoomCreated(RoomCreated roomCreated) { }
+            public void OnRoomDeactivated(RoomDeactivated roomDeactivated) { }
+            public void OnRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) { }
+            public void OnRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) { }
+            public void OnRoomReactivated(apiClientDotNet.Models.Stream stream) { }
+            public void OnRoomUpdated(RoomUpdated roomUpdated) { }
+            public void OnUserJoinedRoom(UserJoinedRoom userJoinedRoom) { }
+            public void OnUserLeftRoom(UserLeftRoom userLeftRoom) { }
         }
 
 

@@ -6,7 +6,7 @@ namespace apiClientDotNet.Listeners
 {
     public interface ElementsActionListener
     {
-        void onElementsAction(User initiator, SymphonyElementsAction action);
-        void onFormMessage(User initiator, String fstreamid, SymphonyElementsAction form);
+        void OnElementsAction(User initiator, SymphonyElementsAction action);
+        void OnFormMessage(User initiator, String fstreamid, SymphonyElementsAction form);
     }
 }

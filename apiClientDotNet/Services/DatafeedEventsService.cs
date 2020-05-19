@@ -99,14 +99,14 @@ namespace apiClientDotNet.Services
                             {
                                 foreach (RoomListener listener in RoomListeners)
                                 {
-                                    listener.onRoomMessage(messageSent.message);
+                                    listener.OnRoomMessage(messageSent.message);
                                 }
                             }
                             else
                             {
                                 foreach (IMListener listener in IMListeners)
                                 {
-                                    listener.onIMMessage(messageSent.message);
+                                    listener.OnIMMessage(messageSent.message);
                                 }
                             }
                             break;
@@ -114,7 +114,7 @@ namespace apiClientDotNet.Services
 
                             foreach (IMListener listeners in IMListeners)
                             {
-                                listeners.onIMCreated(eventv4.Payload.instantMessageCreated.stream);
+                                listeners.OnIMCreated(eventv4.Payload.instantMessageCreated.stream);
                             }
                             break;
 
@@ -122,7 +122,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomCreated(eventv4.Payload.roomCreated);
+                                listener.OnRoomCreated(eventv4.Payload.roomCreated);
                             }
                             break;
 
@@ -130,7 +130,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomUpdated(eventv4.Payload.roomUpdated);
+                                listener.OnRoomUpdated(eventv4.Payload.roomUpdated);
                             }
                             break;
 
@@ -138,7 +138,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomDeactivated(eventv4.Payload.roomDeactivated);
+                                listener.OnRoomDeactivated(eventv4.Payload.roomDeactivated);
                             }
                             break;
 
@@ -146,7 +146,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomReactivated(eventv4.Payload.roomReactivated.stream);
+                                listener.OnRoomReactivated(eventv4.Payload.roomReactivated.stream);
                             }
                             break;
 
@@ -154,7 +154,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onUserJoinedRoom(eventv4.Payload.userJoinedRoom);
+                                listener.OnUserJoinedRoom(eventv4.Payload.userJoinedRoom);
                             }
                             break;
 
@@ -162,7 +162,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onUserLeftRoom(eventv4.Payload.userLeftRoom);
+                                listener.OnUserLeftRoom(eventv4.Payload.userLeftRoom);
                             }
                             break;
 
@@ -170,7 +170,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomMemberPromotedToOwner(eventv4.Payload.roomMemberPromotedToOwner);
+                                listener.OnRoomMemberPromotedToOwner(eventv4.Payload.roomMemberPromotedToOwner);
                             }
                             break;
 
@@ -178,7 +178,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.onRoomMemberDemotedFromOwner(eventv4.Payload.roomMemberDemotedFromOwner);
+                                listener.OnRoomMemberDemotedFromOwner(eventv4.Payload.roomMemberDemotedFromOwner);
                             }
                             break;
 
@@ -186,7 +186,7 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.onConnectionAccepted(eventv4.Payload.connectionAccepted.fromUser);
+                                listener.OnConnectionAccepted(eventv4.Payload.connectionAccepted.fromUser);
                             }
                             break;
 
@@ -194,7 +194,7 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.onConnectionRequested(eventv4.Payload.connectionRequested.toUser);
+                                listener.OnConnectionRequested(eventv4.Payload.connectionRequested.toUser);
                             }
                             break;
 
@@ -208,7 +208,7 @@ namespace apiClientDotNet.Services
 			                User user = eventv4.Initiator.User;
                             foreach (ElementsActionListener listener in ElementsActionListeners)
                             {
-                                listener.onFormMessage(user, StreamID, symphonyElementsAction);
+                                listener.OnFormMessage(user, StreamID, symphonyElementsAction);
                             }
                             break;  
                         default:

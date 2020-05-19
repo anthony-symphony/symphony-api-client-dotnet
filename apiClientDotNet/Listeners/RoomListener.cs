@@ -5,14 +5,14 @@ namespace apiClientDotNet.Listeners
 {
     public interface RoomListener
     {
-        void onRoomMessage(InboundMessage message);
-        void onRoomCreated(RoomCreated roomCreated);
-        void onRoomDeactivated(RoomDeactivated roomDeactivated);
-        void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner);
-        void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner);
-        void onRoomReactivated(Stream stream);
-        void onRoomUpdated(RoomUpdated roomUpdated);
-        void onUserJoinedRoom(UserJoinedRoom userJoinedRoom);
-        void onUserLeftRoom(UserLeftRoom userLeftRoom); 
+        void OnRoomMessage(InboundMessage message);
+        void OnRoomCreated(RoomCreated roomCreated);
+        void OnRoomDeactivated(RoomDeactivated roomDeactivated);
+        void OnRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner);
+        void OnRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner);
+        void OnRoomReactivated(Stream stream);
+        void OnRoomUpdated(RoomUpdated roomUpdated);
+        void OnUserJoinedRoom(UserJoinedRoom userJoinedRoom);
+        void OnUserLeftRoom(UserLeftRoom userLeftRoom); 
     }
 }

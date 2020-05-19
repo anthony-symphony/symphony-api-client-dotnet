@@ -12,18 +12,18 @@ namespace apiClientDotNetTest
 
     public class BotLogic : RoomListener
     {
-        public void onRoomMessage(InboundMessage message)
+        public void OnRoomMessage(InboundMessage message)
          {
             Console.Write(message.Message);
         }
-        public void onRoomCreated(RoomCreated roomCreated) { }
-        public void onRoomDeactivated(RoomDeactivated roomDeactivated) { }
-        public void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) { }
-        public void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) { }
-        public void onRoomReactivated(Stream stream) { }
-        public void onRoomUpdated(RoomUpdated roomUpdated) { }
-        public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) { }
-        public void onUserLeftRoom(UserLeftRoom userLeftRoom) { }
+        public void OnRoomCreated(RoomCreated roomCreated) { }
+        public void OnRoomDeactivated(RoomDeactivated roomDeactivated) { }
+        public void OnRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) { }
+        public void OnRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) { }
+        public void OnRoomReactivated(Stream stream) { }
+        public void OnRoomUpdated(RoomUpdated roomUpdated) { }
+        public void OnUserJoinedRoom(UserJoinedRoom userJoinedRoom) { }
+        public void OnUserLeftRoom(UserLeftRoom userLeftRoom) { }
     }
 
     [TestClass]
@@ -38,9 +38,9 @@ namespace apiClientDotNetTest
             var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             symConfig = symConfigLoader.loadFromFile(configPath);
             var botAuth = new SymBotRSAAuth(symConfig);
-            botAuth.authenticate();
-            var botClient = SymBotClient.initBot(symConfig, botAuth);
-            DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
+            botAuth.Authenticate();
+            var botClient = SymBotClient.InitBot(symConfig, botAuth);
+            DatafeedEventsService datafeedEventsService = botClient.GetDatafeedEventsService();
             Assert.IsNotNull(datafeedEventsService.datafeedId);
         }
     }

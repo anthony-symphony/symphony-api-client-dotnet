@@ -4,7 +4,7 @@ namespace apiClientDotNet.Listeners
 {
     public interface ConnectionListener
     {
-        void onConnectionAccepted(User user);
-        void onConnectionRequested(User user);
+        void OnConnectionAccepted(User user);
+        void OnConnectionRequested(User user);
     }
 }

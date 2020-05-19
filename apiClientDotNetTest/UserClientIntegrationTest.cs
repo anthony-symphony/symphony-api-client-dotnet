@@ -29,8 +29,8 @@ namespace apiClientDotNetTest
             var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             symConfig = symConfigLoader.loadFromFile(configPath);
             var botAuth = new SymBotRSAAuth(symConfig);
-            botAuth.authenticate();
-            symBotClient = SymBotClient.initBot(symConfig, botAuth);
+            botAuth.Authenticate();
+            symBotClient = SymBotClient.InitBot(symConfig, botAuth);
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace apiClientDotNetTest
             var emailList = emails.Split(",");
             var sut = new UserClient(symBotClient);
 
-            List<UserInfo> listUserInfo = sut.getUsersV3(new List<string>(emailList), null, false);
+            List<UserInfo> listUserInfo = sut.GetUsersByEmail(new List<string>(emailList), false);
 
             Assert.IsNotNull(listUserInfo);
             Assert.AreEqual(3, listUserInfo.Count);
@@ -60,7 +60,7 @@ namespace apiClientDotNetTest
             var query = config.GetSection(this.GetType().Name).GetSection("test_search_user_query").Value;
             var sut = new UserClient(symBotClient);
 
-            UserSearchResult searchUsers = sut.searchUsers(query, false, 0, 10, null);
+            UserSearchResult searchUsers = sut.SearchUsers(query, null, false, 0, 10);
 
             Assert.IsNotNull(searchUsers);
             Assert.IsTrue(searchUsers.Users.Count >= 1);
