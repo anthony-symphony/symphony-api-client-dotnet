@@ -10,6 +10,8 @@ namespace apiClientDotNet.Clients
 
         ISymAuth GetSymAuth();
 
+        void Reauthenticate();
+
         MessageClient GetMessagesClient();
 
         StreamClient GetStreamsClient();
@@ -38,7 +40,6 @@ namespace apiClientDotNet.Clients
         UserClient getUsersClient();
 
         ConnectionsClient getConnectionsClient();
-
         #endregion
     }
 }

@@ -136,6 +136,13 @@ namespace apiClientDotNet.Clients
             IntializeRequestProxies();
             IntializeAllRequestClients();
         }
+
+        public void Reauthenticate()
+        {
+            SymAuth.Authenticate();
+            SetAuthTokens();
+        }
+
         protected void LoadBaseUrls() 
         {
             BaseUrls = new Dictionary<SymphonyRequestType, string>();
@@ -203,18 +210,16 @@ namespace apiClientDotNet.Clients
             {
                 InitializeRequestClient(type);
             }
+            SetAuthTokens();
         }
 
         protected void InitializeRequestClient(SymphonyRequestType type) 
         {
-            var requestProxies = GetRequestProxies();
-            var BaseUrls = GetBaseUrls();
-            var symAuth = GetSymAuth();
             HttpClient requestClient;
-            if (requestProxies[type] != null) 
+            if (RequestProxies[type] != null) 
             {
                 var requestHandler = new HttpClientHandler();
-                requestHandler.Proxy = requestProxies[type];
+                requestHandler.Proxy = RequestProxies[type];
                 requestClient = new HttpClient(requestHandler);
             }
             else 
@@ -225,15 +230,17 @@ namespace apiClientDotNet.Clients
             {
                 requestClient.BaseAddress = new Uri(BaseUrls[type]);
             }
-            if(type == SymphonyRequestType.Pod || type == SymphonyRequestType.Agent) 
-            {
-                requestClient.DefaultRequestHeaders.Add("sessionToken", symAuth.GetSessionToken());
-                if (type == SymphonyRequestType.Agent) 
-                {
-                    requestClient.DefaultRequestHeaders.Add("keyManagerToken", symAuth.GetKeyManagerToken());
-                }
-            }
             RequestClients[type] = requestClient;
+        }
+
+        protected void SetAuthTokens()
+        {
+            RequestClients[SymphonyRequestType.Pod].DefaultRequestHeaders.Remove("sessionToken");
+            RequestClients[SymphonyRequestType.Pod].DefaultRequestHeaders.Add("sessionToken", SymAuth.GetSessionToken());
+            RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Remove("sessionToken");
+            RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Remove("keyManagerToken");
+            RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Add("sessionToken", SymAuth.GetSessionToken());
+            RequestClients[SymphonyRequestType.Agent].DefaultRequestHeaders.Add("keyManagerToken", SymAuth.GetKeyManagerToken());
         }
 
 

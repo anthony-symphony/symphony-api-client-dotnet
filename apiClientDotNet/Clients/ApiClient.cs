@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using apiClientDotNet.Clients.Constants;
+using System.Security.Authentication;
 
 namespace apiClientDotNet.Clients
 {
@@ -83,8 +84,20 @@ namespace apiClientDotNet.Clients
             }
             else
             {
-                HandleError(response);
-                result = default(T);
+                try
+                {
+                    HandleError(response);
+                    result = default(T);
+                }
+                catch (AuthenticationException)
+                {
+                    SymClient.Reauthenticate();
+                    return ExecuteRequestContent<T>(method, requestUri, postData, optionalHeaders);
+                }
+                catch (Exception)
+                {
+                    result = default(T);
+                }
             }
             return new SymClientResponse<T> (result, response);
         }
@@ -104,37 +117,29 @@ namespace apiClientDotNet.Clients
 
         protected void HandleError(HttpResponseMessage response)
         {
-            try 
+            Console.WriteLine(response.RequestMessage.RequestUri.OriginalString);
+            Console.WriteLine(JToken.Parse(response.RequestMessage.Content.ReadAsStringAsync().Result).ToString(Formatting.Indented));
+            var message = HttpStatusCode.BadRequest.ToString() + ": " + response.Content.ReadAsStringAsync().Result;
+            if (response.StatusCode == HttpStatusCode.BadRequest)
             {
-                Console.WriteLine(response.RequestMessage.RequestUri.OriginalString);
-                Console.WriteLine(JToken.Parse(response.RequestMessage.Content.ReadAsStringAsync().Result).ToString(Formatting.Indented));
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    //logger.error("Client error occurred", error);
-                    throw new Exception("Bad Request Error");
-                } 
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    //logger.error("User unauthorized, refreshing tokens");
-                    //botClient.getSymBotAuth().authenticate();
-                    throw new Exception("Bad Tokens");
-                } 
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    //logger.error("Forbidden: Caller lacks necessary entitlement.");
-                    throw new Exception("Forbidden Error");
-                } 
-                else if (response.StatusCode == HttpStatusCode.InternalServerError) 
-                {
-                    //logger.error(error.getMessage());
-                    throw new Exception("Bad 500");
-                }
+                //logger.error("Client error occurred", error);
+                throw new HttpRequestException(message);
             } 
-            catch (Exception e)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw e;
+                //logger.error("User unauthorized, refreshing tokens");
+                throw new AuthenticationException(message);
+            } 
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                //logger.error("Forbidden: Caller lacks necessary entitlement.");
+                throw new HttpRequestException(message);
+            } 
+            else if (response.StatusCode == HttpStatusCode.InternalServerError) 
+            {
+                //logger.error(error.getMessage());
+                throw new HttpRequestException(message);
             }
-
         }
     }
 }
