@@ -30,7 +30,7 @@ namespace apiClientDotNet
             return result.ParsedObject.Id;
         }
 
-        public RoomInfo CreateRoom(Room room)
+        public RoomInfo CreateRoom(RoomAttributes room)
         {
             var requestUri = new Uri(PodConstants.CreateRoom, UriKind.Relative);
             var result = ExecuteRequest<RoomInfo>(HttpMethod.Post, requestUri, room);
@@ -62,7 +62,7 @@ namespace apiClientDotNet
             return result.ParsedObject;
         }
 
-        public RoomInfo UpdateRoom(string streamId, Room room) 
+        public RoomInfo UpdateRoom(string streamId, RoomAttributes room) 
         {
             var requestUri = new Uri(PodConstants.UpdateRoomInfo.Replace("{id}", streamId), UriKind.Relative);
             var result = ExecuteRequest<RoomInfo>(HttpMethod.Post, requestUri, room);

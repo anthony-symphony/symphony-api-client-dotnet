@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
-    public class Room
+    public class RoomAttributes
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -35,7 +35,7 @@ namespace apiClientDotNet.Models
         public bool ViewHistory { get; set; }
 
         [JsonProperty("multiLateralRoom")]
-        public bool MultiLateralRoom { get; set; }
+        public bool? MultiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
         public List<Keyword> Keywords { get; set; }
