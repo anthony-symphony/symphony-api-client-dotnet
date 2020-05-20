@@ -77,6 +77,10 @@ namespace apiClientDotNet.Clients
                     request.Headers.Add(header.Key, header.Value);
                 }
             }
+            if (postData != null)
+            {
+                request.Content = postData;
+            }
             var response = requestClient.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
