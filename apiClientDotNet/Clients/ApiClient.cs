@@ -77,6 +77,10 @@ namespace apiClientDotNet.Clients
                     request.Headers.Add(header.Key, header.Value);
                 }
             }
+            if (postData != null)
+            {
+                request.Content = postData;
+            }
             var response = requestClient.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -94,9 +98,10 @@ namespace apiClientDotNet.Clients
                     SymClient.Reauthenticate();
                     return ExecuteRequestContent<T>(method, requestUri, postData, optionalHeaders);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     result = default(T);
+                    throw e;
                 }
             }
             return new SymClientResponse<T> (result, response);
