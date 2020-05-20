@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
@@ -14,12 +11,12 @@ namespace apiClientDotNet.Models
         public string Status { get; set; }
 
         [JsonProperty("firstRequestedAt")]
-        public long FirstRequestedAt { get; set; }
+        public long? FirstRequestedAt { get; set; }
 
         [JsonProperty("updatedAt")]
-        public long UpdatedAt { get; set; }
+        public long? UpdatedAt { get; set; }
 
         [JsonProperty("requestCounter")]
-        public int RequestCounter { get; set; }
+        public int? RequestCounter { get; set; }
     }
 }
