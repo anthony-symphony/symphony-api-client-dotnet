@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models.Events
 {
     public class RoomUpdated
     {
         [JsonProperty("stream")]
-        public Stream stream { get; set; }
+        public Stream Stream { get; set; }
 
         [JsonProperty("newRoomProperties")]
-        public RoomProperties newRoomProperties { get; set; }
+        public RoomProperties NewRoomProperties { get; set; }
     }
 }

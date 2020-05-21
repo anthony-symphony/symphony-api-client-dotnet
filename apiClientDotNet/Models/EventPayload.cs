@@ -9,48 +9,48 @@ namespace apiClientDotNet.Models
     public class EventPayload
     {
         [JsonProperty("messageSent")]
-        public MessageSent messageSent { get; set; }
+        public MessageSent MessageSent { get; set; }
 
         [JsonProperty("sharedPost")]
-        public SharedPost sharedPost { get; set; }
+        public SharedPost SharedPost { get; set; }
 
         [JsonProperty("instantMessageCreated")]
-        public IMCreated instantMessageCreated { get; set; }
+        public IMCreated InstantMessageCreated { get; set; }
 
         [JsonProperty("roomCreated")]
-        public RoomCreated roomCreated { get; set; }
+        public RoomCreated RoomCreated { get; set; }
 
         [JsonProperty("roomUpdated")]
-        public RoomUpdated roomUpdated { get; set; }
+        public RoomUpdated RoomUpdated { get; set; }
 
         [JsonProperty("roomDeactivated")]
-        public RoomDeactivated roomDeactivated { get; set; }
+        public RoomDeactivated RoomDeactivated { get; set; }
 
         [JsonProperty("roomReactivated")]
-        public RoomReactivated roomReactivated { get; set; }
+        public RoomReactivated RoomReactivated { get; set; }
 
         [JsonProperty("userJoinedRoom")]
-        public UserJoinedRoom userJoinedRoom { get; set; }
+        public UserJoinedRoom UserJoinedRoom { get; set; }
 
         [JsonProperty("userLeftRoom")]
-        public UserLeftRoom userLeftRoom { get; set; }
+        public UserLeftRoom UserLeftRoom { get; set; }
 
         [JsonProperty("roomMemberPromotedToOwner")]
-        public RoomMemberPromotedToOwner roomMemberPromotedToOwner { get; set; }
+        public RoomMemberPromotedToOwner RoomMemberPromotedToOwner { get; set; }
 
         [JsonProperty("roomMemberDemotedFromOwner")]
-        public RoomMemberDemotedFromOwner roomMemberDemotedFromOwner { get; set; }
+        public RoomMemberDemotedFromOwner RoomMemberDemotedFromOwner { get; set; }
 
         [JsonProperty("connectionRequested")]
-        public ConnectionRequested connectionRequested { get; set; }
+        public ConnectionRequested ConnectionRequested { get; set; }
 
         [JsonProperty("connectionAccepted")]
-        public ConnectionAccepted connectionAccepted { get; set; }
+        public ConnectionAccepted ConnectionAccepted { get; set; }
 
         [JsonProperty("messageSuppressed")]
-        public MessageSuppressed messageSuppressed { get; set; }
+        public MessageSuppressed MessageSuppressed { get; set; }
 
         [JsonProperty("symphonyElementsAction")]
-        public SymphonyElementsAction symphonyElementsAction { get; set; }
+        public SymphonyElementsAction SymphonyElementsAction { get; set; }
     }
 }

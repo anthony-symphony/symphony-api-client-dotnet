@@ -94,19 +94,19 @@ namespace apiClientDotNet.Services
                     {
                         case "MESSAGESENT":
 
-                            MessageSent messageSent = eventv4.Payload.messageSent;
-                            if (messageSent.message.Stream.StreamType.Equals("ROOM"))
+                            MessageSent messageSent = eventv4.Payload.MessageSent;
+                            if (messageSent.Message.Stream.StreamType.Equals("ROOM"))
                             {
                                 foreach (RoomListener listener in RoomListeners)
                                 {
-                                    listener.OnRoomMessage(messageSent.message);
+                                    listener.OnRoomMessage(messageSent.Message);
                                 }
                             }
                             else
                             {
                                 foreach (IMListener listener in IMListeners)
                                 {
-                                    listener.OnIMMessage(messageSent.message);
+                                    listener.OnIMMessage(messageSent.Message);
                                 }
                             }
                             break;
@@ -114,7 +114,7 @@ namespace apiClientDotNet.Services
 
                             foreach (IMListener listeners in IMListeners)
                             {
-                                listeners.OnIMCreated(eventv4.Payload.instantMessageCreated.stream);
+                                listeners.OnIMCreated(eventv4.Payload.InstantMessageCreated.Stream);
                             }
                             break;
 
@@ -122,7 +122,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomCreated(eventv4.Payload.roomCreated);
+                                listener.OnRoomCreated(eventv4.Payload.RoomCreated);
                             }
                             break;
 
@@ -130,7 +130,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomUpdated(eventv4.Payload.roomUpdated);
+                                listener.OnRoomUpdated(eventv4.Payload.RoomUpdated);
                             }
                             break;
 
@@ -138,7 +138,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomDeactivated(eventv4.Payload.roomDeactivated);
+                                listener.OnRoomDeactivated(eventv4.Payload.RoomDeactivated);
                             }
                             break;
 
@@ -146,7 +146,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomReactivated(eventv4.Payload.roomReactivated.stream);
+                                listener.OnRoomReactivated(eventv4.Payload.RoomReactivated.Stream);
                             }
                             break;
 
@@ -154,7 +154,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnUserJoinedRoom(eventv4.Payload.userJoinedRoom);
+                                listener.OnUserJoinedRoom(eventv4.Payload.UserJoinedRoom);
                             }
                             break;
 
@@ -162,7 +162,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnUserLeftRoom(eventv4.Payload.userLeftRoom);
+                                listener.OnUserLeftRoom(eventv4.Payload.UserLeftRoom);
                             }
                             break;
 
@@ -170,7 +170,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomMemberPromotedToOwner(eventv4.Payload.roomMemberPromotedToOwner);
+                                listener.OnRoomMemberPromotedToOwner(eventv4.Payload.RoomMemberPromotedToOwner);
                             }
                             break;
 
@@ -178,7 +178,7 @@ namespace apiClientDotNet.Services
 
                             foreach (RoomListener listener in RoomListeners)
                             {
-                                listener.OnRoomMemberDemotedFromOwner(eventv4.Payload.roomMemberDemotedFromOwner);
+                                listener.OnRoomMemberDemotedFromOwner(eventv4.Payload.RoomMemberDemotedFromOwner);
                             }
                             break;
 
@@ -186,7 +186,7 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.OnConnectionAccepted(eventv4.Payload.connectionAccepted.fromUser);
+                                listener.OnConnectionAccepted(eventv4.Payload.ConnectionAccepted.FromUser);
                             }
                             break;
 
@@ -194,13 +194,13 @@ namespace apiClientDotNet.Services
 
                             foreach (ConnectionListener listener in ConnectionListeners)
                             {
-                                listener.OnConnectionRequested(eventv4.Payload.connectionRequested.toUser);
+                                listener.OnConnectionRequested(eventv4.Payload.ConnectionRequested.ToUser);
                             }
                             break;
 
 			            case "SYMPHONYELEMENTSACTION":
-                            var streamID = eventv4.Payload.symphonyElementsAction.FormStream.StreamId.ToString();
-                            SymphonyElementsAction symphonyElementsAction = eventv4.Payload.symphonyElementsAction;
+                            var streamID = eventv4.Payload.SymphonyElementsAction.FormStream.StreamId.ToString();
+                            SymphonyElementsAction symphonyElementsAction = eventv4.Payload.SymphonyElementsAction;
 			                User user = eventv4.Initiator.User;
                             foreach (ElementsActionListener listener in ElementsActionListeners)
                             {
