@@ -2,7 +2,7 @@
 
 namespace apiClientDotNet.Listeners
 {
-    public interface ConnectionListener
+    public interface IConnectionListener
     {
         void OnConnectionAccepted(User user);
         void OnConnectionRequested(User user);

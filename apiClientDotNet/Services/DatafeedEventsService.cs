@@ -11,10 +11,10 @@ namespace apiClientDotNet.Services
     {
 
         static bool StopLoop = false;
-        private List<RoomListener> RoomListeners;
-        private List<IMListener> IMListeners;
-        private List<ConnectionListener> ConnectionListeners;
-	    private List<ElementsActionListener> ElementsActionListeners;
+        private List<IRoomListener> RoomListeners;
+        private List<IIMListener> IMListeners;
+        private List<IConnectionListener> ConnectionListeners;
+	    private List<IElementsActionListener> ElementsActionListeners;
         private DatafeedClient DatafeedClient;
         private SymBotClient BotClient;
         public Datafeed Datafeed;
@@ -32,10 +32,10 @@ namespace apiClientDotNet.Services
         public DatafeedEventsService(SymBotClient client)
         {
             BotClient = client;
-            RoomListeners = new List<RoomListener>();
-            IMListeners = new List<IMListener>();
-            ConnectionListeners = new List<ConnectionListener>();
-	        ElementsActionListeners = new List<ElementsActionListener>();
+            RoomListeners = new List<IRoomListener>();
+            IMListeners = new List<IIMListener>();
+            ConnectionListeners = new List<IConnectionListener>();
+	        ElementsActionListeners = new List<IElementsActionListener>();
             DatafeedClient = client.GetDatafeedClient();
             Datafeed = DatafeedClient.CreateDatafeed();
         }
@@ -97,14 +97,14 @@ namespace apiClientDotNet.Services
                             MessageSent messageSent = eventv4.Payload.MessageSent;
                             if (messageSent.Message.Stream.StreamType.Equals("ROOM"))
                             {
-                                foreach (RoomListener listener in RoomListeners)
+                                foreach (IRoomListener listener in RoomListeners)
                                 {
                                     listener.OnRoomMessage(messageSent.Message);
                                 }
                             }
                             else
                             {
-                                foreach (IMListener listener in IMListeners)
+                                foreach (IIMListener listener in IMListeners)
                                 {
                                     listener.OnIMMessage(messageSent.Message);
                                 }
@@ -112,7 +112,7 @@ namespace apiClientDotNet.Services
                             break;
                         case "INSTANTMESSAGECREATED":
 
-                            foreach (IMListener listeners in IMListeners)
+                            foreach (IIMListener listeners in IMListeners)
                             {
                                 listeners.OnIMCreated(eventv4.Payload.InstantMessageCreated.Stream);
                             }
@@ -120,7 +120,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMCREATED":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomCreated(eventv4.Payload.RoomCreated);
                             }
@@ -128,7 +128,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMUPDATED":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomUpdated(eventv4.Payload.RoomUpdated);
                             }
@@ -136,7 +136,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMDEACTIVATED":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomDeactivated(eventv4.Payload.RoomDeactivated);
                             }
@@ -144,7 +144,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMREACTIVATED":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomReactivated(eventv4.Payload.RoomReactivated.Stream);
                             }
@@ -152,7 +152,7 @@ namespace apiClientDotNet.Services
 
                         case "USERJOINEDROOM":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnUserJoinedRoom(eventv4.Payload.UserJoinedRoom);
                             }
@@ -160,7 +160,7 @@ namespace apiClientDotNet.Services
 
                         case "USERLEFTROOM":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnUserLeftRoom(eventv4.Payload.UserLeftRoom);
                             }
@@ -168,7 +168,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERPROMOTEDTOOWNER":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomMemberPromotedToOwner(eventv4.Payload.RoomMemberPromotedToOwner);
                             }
@@ -176,7 +176,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERDEMOTEDFROMOWNER":
 
-                            foreach (RoomListener listener in RoomListeners)
+                            foreach (IRoomListener listener in RoomListeners)
                             {
                                 listener.OnRoomMemberDemotedFromOwner(eventv4.Payload.RoomMemberDemotedFromOwner);
                             }
@@ -184,7 +184,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONACCEPTED":
 
-                            foreach (ConnectionListener listener in ConnectionListeners)
+                            foreach (IConnectionListener listener in ConnectionListeners)
                             {
                                 listener.OnConnectionAccepted(eventv4.Payload.ConnectionAccepted.FromUser);
                             }
@@ -192,7 +192,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONREQUESTED":
 
-                            foreach (ConnectionListener listener in ConnectionListeners)
+                            foreach (IConnectionListener listener in ConnectionListeners)
                             {
                                 listener.OnConnectionRequested(eventv4.Payload.ConnectionRequested.ToUser);
                             }
@@ -202,7 +202,7 @@ namespace apiClientDotNet.Services
                             var streamID = eventv4.Payload.SymphonyElementsAction.FormStream.StreamId.ToString();
                             SymphonyElementsAction symphonyElementsAction = eventv4.Payload.SymphonyElementsAction;
 			                User user = eventv4.Initiator.User;
-                            foreach (ElementsActionListener listener in ElementsActionListeners)
+                            foreach (IElementsActionListener listener in ElementsActionListeners)
                             {
                                 listener.OnFormMessage(user, streamID, symphonyElementsAction);
                             }
@@ -214,42 +214,42 @@ namespace apiClientDotNet.Services
             }
         }
 
-        public void AddRoomListener(RoomListener listener)
+        public void AddRoomListener(IRoomListener listener)
         {
             RoomListeners.Add(listener);
         }
 
-        public void RemoveRoomListener(RoomListener listener)
+        public void RemoveRoomListener(IRoomListener listener)
         {
             RoomListeners.Remove(listener);
         }
 
-        public void AddIMListener(IMListener listener)
+        public void AddIMListener(IIMListener listener)
         {
             IMListeners.Add(listener);
         }
 
-        public void RemoveIMListener(IMListener listener)
+        public void RemoveIMListener(IIMListener listener)
         {
             IMListeners.Remove(listener);
         }
 
-        public void AddConnectionsListener(ConnectionListener listener)
+        public void AddConnectionsListener(IConnectionListener listener)
         {
             ConnectionListeners.Add(listener);
         }
 
-        public void RemoveConnectionsListener(ConnectionListener listener)
+        public void RemoveConnectionsListener(IConnectionListener listener)
         {
             ConnectionListeners.Remove(listener);
         }
 
-        public void AddElementsActionListener(ElementsActionListener listener)
+        public void AddElementsActionListener(IElementsActionListener listener)
         {
             ElementsActionListeners.Add(listener);
         }
 
-        public void RemoveElementsActionListener(ElementsActionListener listener)
+        public void RemoveElementsActionListener(IElementsActionListener listener)
         {
             ElementsActionListeners.Remove(listener);
         }
@@ -269,42 +269,42 @@ namespace apiClientDotNet.Services
         {
             StopGettingEventsFromDatafeed();
         }
-        public void addRoomListener(RoomListener listener)
+        public void addRoomListener(IRoomListener listener)
         {
             AddRoomListener(listener);
         }
 
-        public void removeRoomListener(RoomListener listener)
+        public void removeRoomListener(IRoomListener listener)
         {
             RemoveRoomListener(listener);
         }
 
-        public void addIMListener(IMListener listener)
+        public void addIMListener(IIMListener listener)
         {
             AddIMListener(listener);
         }
 
-        public void removeIMListener(IMListener listener)
+        public void removeIMListener(IIMListener listener)
         {
             RemoveIMListener(listener);
         }
 
-        public void addConnectionsListener(ConnectionListener listener)
+        public void addConnectionsListener(IConnectionListener listener)
         {
             AddConnectionsListener(listener);
         }
 
-        public void removeConnectionsListener(ConnectionListener listener)
+        public void removeConnectionsListener(IConnectionListener listener)
         {
             RemoveConnectionsListener(listener);
         }
 
-        public void addElementsActionListener(ElementsActionListener listener)
+        public void addElementsActionListener(IElementsActionListener listener)
         {
             AddElementsActionListener(listener);
         }
 
-        public void removeElementsActionListener(ElementsActionListener listener)
+        public void removeElementsActionListener(IElementsActionListener listener)
         {
             RemoveElementsActionListener(listener);
         }

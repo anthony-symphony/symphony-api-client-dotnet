@@ -10,7 +10,7 @@ using apiClientDotNet.Authentication;
 namespace apiClientDotNetTest
 {
 
-    public class BotLogic : RoomListener
+    public class BotLogic : IRoomListener
     {
         public void OnRoomMessage(InboundMessage message)
          {

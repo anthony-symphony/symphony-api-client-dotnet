@@ -3,7 +3,7 @@ using apiClientDotNet.Models.Events;
 
 namespace apiClientDotNet.Listeners
 {
-    public interface RoomListener
+    public interface IRoomListener
     {
         void OnRoomMessage(InboundMessage message);
         void OnRoomCreated(RoomCreated roomCreated);

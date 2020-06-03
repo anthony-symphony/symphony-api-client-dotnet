@@ -1,4 +1,4 @@
 namespace apiClientDotNet.Listeners
 {
-    public interface FirehoseListener : ConnectionListener, ElementsActionListener, IMListener, RoomListener {};
+    public interface IFirehoseListener : IConnectionListener, IElementsActionListener, IIMListener, IRoomListener{}
 }

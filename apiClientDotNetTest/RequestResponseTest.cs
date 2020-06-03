@@ -80,7 +80,7 @@ namespace apiClientDotNetTest
             task.Start();
         }
 
-        public class BotLogic : RoomListener
+        public class BotLogic : IRoomListener
         {
             DatafeedEventsService datafeedEventsService;
             public BotLogic(DatafeedEventsService datafeedEventsService)
