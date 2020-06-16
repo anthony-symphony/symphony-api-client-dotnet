@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
@@ -7,26 +8,30 @@ namespace apiClientDotNet.Models
         [JsonProperty("sessionAuthHost")]
         public string SessionAuthHost { get; set; }
 
-        [JsonProperty("sessionAuthPort")]
-        public int? SessionAuthPort { get; set; }
+        [JsonProperty("sessionAuthPort", DefaultValueHandling = DefaultValueHandling.Populate)]
+        [DefaultValue(443)]
+        public int SessionAuthPort { get; set; }
 
         [JsonProperty("keyAuthHost")]
         public string KeyAuthHost { get; set; }
 
-        [JsonProperty("keyAuthPort")]
-        public int? KeyAuthPort { get; set; }
+        [JsonProperty("keyAuthPort", DefaultValueHandling = DefaultValueHandling.Populate)]
+        [DefaultValue(443)]
+        public int KeyAuthPort { get; set; }
 
         [JsonProperty("podHost")]
         public string PodHost { get; set; }
 
-        [JsonProperty("podPort")]
-        public int? PodPort { get; set; }
+        [JsonProperty("podPort", DefaultValueHandling = DefaultValueHandling.Populate)]
+        [DefaultValue(443)]
+        public int PodPort { get; set; }
 
         [JsonProperty("agentHost")]
         public string AgentHost { get; set; }
 
-        [JsonProperty("agentPort")]
-        public int? AgentPort { get; set; }
+        [JsonProperty("agentPort", DefaultValueHandling = DefaultValueHandling.Populate)]
+        [DefaultValue(443)]
+        public int AgentPort { get; set; }
 
         [JsonProperty("botCertPath")]
         public string BotCertPath { get; set; }
