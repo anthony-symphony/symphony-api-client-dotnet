@@ -18,10 +18,10 @@ namespace apiClientDotNet.Models
         public List<User> Members { get; set; }
 
         [JsonProperty("external")]
-        public bool External { get; set; }
+        public bool? External { get; set; }
 
         [JsonProperty("crossPod")]
-        public bool CrossPod { get; set; }
+        public bool? CrossPod { get; set; }
 
     }
 }

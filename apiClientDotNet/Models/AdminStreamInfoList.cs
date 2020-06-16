@@ -6,13 +6,13 @@ namespace apiClientDotNet.Models
     public class AdminStreamInfoList 
     {
         [JsonProperty("count")]
-        public int Count;
+        public int? Count;
         
         [JsonProperty("skip")]
-        public int Skip;
+        public int? Skip;
         
         [JsonProperty("limit")]
-        public int Limit;
+        public int? Limit;
         
         [JsonProperty("filter")]
         public AdminStreamFilter Filter;

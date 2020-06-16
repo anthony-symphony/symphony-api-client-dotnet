@@ -6,10 +6,10 @@ namespace apiClientDotNet.Models
     public class UserSearchResult
     {
         [JsonProperty("count")]
-        public int Count { get; set; }
+        public int? Count { get; set; }
 
         [JsonProperty("skip")]
-        public int Skip { get; set; }
+        public int? Skip { get; set; }
 
         [JsonProperty("query")]
         public string Query { get; set; }
@@ -21,6 +21,6 @@ namespace apiClientDotNet.Models
         public List<UserInfo> Users { get; set; }
 
         [JsonProperty("limit")]
-        public int Limit { get; set; }
+        public int? Limit { get; set; }
     }
 }

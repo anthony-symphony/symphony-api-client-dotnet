@@ -20,7 +20,7 @@ namespace apiClientDotNet.Models
         public string Username { get; set; }
 
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
     }
 }

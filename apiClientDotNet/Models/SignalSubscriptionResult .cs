@@ -6,13 +6,13 @@ namespace apiClientDotNet.Models
     public class SignalSubscriptionResult
     {
         [JsonProperty("requestedSubscription")]
-        public int RequestedSubscription { get; set; }
+        public int? RequestedSubscription { get; set; }
 
         [JsonProperty("successfulSubscription")]
-        public int SuccessfulSubscription { get; set; }
+        public int? SuccessfulSubscription { get; set; }
 
         [JsonProperty("failedSubscription")]
-        public int FailedSubscription { get; set; }
+        public int? FailedSubscription { get; set; }
 
         [JsonProperty("subscriptionErrors")]
         public List<long> SubscriptionErrors { get; set; }

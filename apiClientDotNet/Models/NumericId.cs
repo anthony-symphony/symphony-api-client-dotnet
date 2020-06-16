@@ -6,6 +6,6 @@ namespace apiClientDotNet.Models
     {
     
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public long? Id { get; set; }
     }
 }

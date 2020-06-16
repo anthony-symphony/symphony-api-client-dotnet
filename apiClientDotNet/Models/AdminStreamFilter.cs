@@ -21,9 +21,9 @@ namespace apiClientDotNet.Models
         public string Privacy { get; set; }
 
         [JsonProperty("startDate")]
-        public long StartDate { get; set; }
+        public long? StartDate { get; set; }
 
         [JsonProperty("endDate")]
-        public long EndDate { get; set; }
+        public long? EndDate { get; set; }
     }
 }

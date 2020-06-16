@@ -14,25 +14,25 @@ namespace apiClientDotNet.Models
         public string Description { get; set; }
 
         [JsonProperty("membersCanInvite")]
-        public bool MembersCanInvite { get; set; }
+        public bool? MembersCanInvite { get; set; }
 
         [JsonProperty("discoverable")]
-        public bool Discoverable { get; set; }
+        public bool? Discoverable { get; set; }
 
         [JsonProperty("public")]
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         [JsonProperty("readOnly")]
-        public bool ReadOnly { get; set; }
+        public bool? ReadOnly { get; set; }
 
         [JsonProperty("copyProtected")]
-        public bool CopyProtected { get; set; }
+        public bool? CopyProtected { get; set; }
 
         [JsonProperty("crossPod")]
-        public bool CrossPod { get; set; }
+        public bool? CrossPod { get; set; }
 
         [JsonProperty("viewHistory")]
-        public bool ViewHistory { get; set; }
+        public bool? ViewHistory { get; set; }
 
         [JsonProperty("multiLateralRoom")]
         public bool? MultiLateralRoom { get; set; }

@@ -8,10 +8,10 @@ namespace apiClientDotNet.Models
         public string Category { get; set; }
 
         [JsonProperty("userId")]
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
     }
 }

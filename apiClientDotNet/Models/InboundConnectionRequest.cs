@@ -5,7 +5,7 @@ namespace apiClientDotNet.Models
     public class InboundConnectionRequest
     {
         [JsonProperty("userId")]
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }

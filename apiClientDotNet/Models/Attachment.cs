@@ -14,7 +14,7 @@ namespace apiClientDotNet.Models
         public string Name { get; set; }
 
         [JsonProperty("size")]
-        public long Size { get; set; }
+        public long? Size { get; set; }
 
         [JsonProperty("image")]
         public ImageInfo Image { get; set; }

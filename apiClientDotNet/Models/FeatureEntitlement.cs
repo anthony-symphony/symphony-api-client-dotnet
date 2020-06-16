@@ -8,6 +8,6 @@ namespace apiClientDotNet.Models
         public string Entitlment;
         
         [JsonProperty("enabled")]
-        public bool Enabled;
+        public bool? Enabled;
     }
 }

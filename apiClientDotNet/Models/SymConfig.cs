@@ -8,25 +8,25 @@ namespace apiClientDotNet.Models
         public string SessionAuthHost { get; set; }
 
         [JsonProperty("sessionAuthPort")]
-        public int SessionAuthPort { get; set; }
+        public int? SessionAuthPort { get; set; }
 
         [JsonProperty("keyAuthHost")]
         public string KeyAuthHost { get; set; }
 
         [JsonProperty("keyAuthPort")]
-        public int KeyAuthPort { get; set; }
+        public int? KeyAuthPort { get; set; }
 
         [JsonProperty("podHost")]
         public string PodHost { get; set; }
 
         [JsonProperty("podPort")]
-        public int PodPort { get; set; }
+        public int? PodPort { get; set; }
 
         [JsonProperty("agentHost")]
         public string AgentHost { get; set; }
 
         [JsonProperty("agentPort")]
-        public int AgentPort { get; set; }
+        public int? AgentPort { get; set; }
 
         [JsonProperty("botCertPath")]
         public string BotCertPath { get; set; }

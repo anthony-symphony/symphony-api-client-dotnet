@@ -11,19 +11,19 @@ namespace apiClientDotNet.Models
         public string Id { get; set; }
 
         [JsonProperty("isExternal")]
-        public bool IsExternal { get; set; }
+        public bool? IsExternal { get; set; }
 
         [JsonProperty("isActive")]
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
 
         [JsonProperty("isPublic")]
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
 
         [JsonProperty("crossPod")]
-        public bool CrossPod { get; set; }
+        public bool? CrossPod { get; set; }
 
         [JsonProperty("origin")]
         public string Origin { get; set; }

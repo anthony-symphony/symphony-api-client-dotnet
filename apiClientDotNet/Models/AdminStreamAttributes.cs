@@ -21,24 +21,24 @@ namespace apiClientDotNet.Models
         public List<long> Members { get; set; }
 
         [JsonProperty("createdByUserId")]
-        public long CreatedByUserId { get; set; }
+        public long? CreatedByUserId { get; set; }
 
         [JsonProperty("createdDate")]
-        public long CreatedDate { get; set; }
+        public long? CreatedDate { get; set; }
 
         [JsonProperty("lastModifiedDate")]
-        public long LastModifiedDate { get; set; }
+        public long? LastModifiedDate { get; set; }
 
         [JsonProperty("originCompany")]
         public string OriginCompany { get; set; }
 
         [JsonProperty("originCompanyId")]
-        public int OriginCompanyId { get; set; }
+        public int? OriginCompanyId { get; set; }
 
         [JsonProperty("membersCount")]
-        public int MembersCount { get; set; }
+        public int? MembersCount { get; set; }
 
         [JsonProperty("lastMessageDate")]
-        public long LastMessageDate { get; set; }
+        public long? LastMessageDate { get; set; }
     }
 }

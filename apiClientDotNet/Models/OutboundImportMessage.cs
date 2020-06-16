@@ -11,10 +11,10 @@ namespace apiClientDotNet.Models
         public string Data { get; set; }
 
         [JsonProperty("intendedMessageTimestamp")]
-        public long IntendedMessageTimestamp { get; set; }
+        public long? IntendedMessageTimestamp { get; set; }
 
         [JsonProperty("intendedMessageFromUserId")]
-        public long IntendedMessageFromUserId { get; set; }
+        public long? IntendedMessageFromUserId { get; set; }
 
         [JsonProperty("originatingSystemId")]
         public string OriginatingSystemId { get; set; }

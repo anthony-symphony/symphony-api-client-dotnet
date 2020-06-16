@@ -14,7 +14,7 @@ namespace apiClientDotNet.Models
         public string Sku;
         
         [JsonProperty("subscribed")]
-        public bool Subscribed;
+        public bool? Subscribed;
         
         [JsonProperty("type")]
         public string Type;

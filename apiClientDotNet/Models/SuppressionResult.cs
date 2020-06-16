@@ -8,9 +8,9 @@ namespace apiClientDotNet.Models
         public string MessageId { get; set; }
 
         [JsonProperty("suppressed")]
-        public bool Suppressed { get; set; }
+        public bool? Suppressed { get; set; }
 
         [JsonProperty("suppressionDate")]
-        public long SuppressionDate { get; set; }
+        public long? SuppressionDate { get; set; }
     }
 }

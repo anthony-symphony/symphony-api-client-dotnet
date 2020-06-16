@@ -8,7 +8,7 @@ namespace apiClientDotNet.Models
         public string Id { get; set; }
 
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }

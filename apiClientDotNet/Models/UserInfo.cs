@@ -6,7 +6,7 @@ namespace apiClientDotNet.Models
     public class UserInfo
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [JsonProperty("firstName")]
         public string FirstName { get; set; }

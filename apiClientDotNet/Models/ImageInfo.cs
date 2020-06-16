@@ -11,6 +11,6 @@ namespace apiClientDotNet.Models
         public string Id { get; set; }
 
         [JsonProperty("dimension")]
-        public int Dimension { get; set; }
+        public int? Dimension { get; set; }
     }
 }

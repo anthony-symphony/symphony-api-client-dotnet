@@ -9,7 +9,7 @@ namespace apiClientDotNet.Models
         public string MessageId { get; set; }
 
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }
@@ -27,7 +27,7 @@ namespace apiClientDotNet.Models
         public Stream Stream { get; set; }
 
         [JsonProperty("externalRecipients")]
-        public bool ExternalRecipients { get; set; }
+        public bool? ExternalRecipients { get; set; }
 
         [JsonProperty("diagnostic")]
         public string Diagnostic { get; set; }

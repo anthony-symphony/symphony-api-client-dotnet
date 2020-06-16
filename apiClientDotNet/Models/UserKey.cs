@@ -8,7 +8,7 @@ namespace apiClientDotNet.Models
         public string Key;
         
         [JsonProperty("expirationDate")]
-        public long ExpirationDate;
+        public long? ExpirationDate;
         
         [JsonProperty("action")]
         public string Action;

@@ -14,12 +14,12 @@ namespace apiClientDotNet.Models
         public string Query { get; set; }
 
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         [JsonProperty("companyWide")]
-        public bool CompanyWide { get; set; }
+        public bool? CompanyWide { get; set; }
 
         [JsonProperty("visibleOnProfile")]
-        public bool VisibleOnProfile { get; set; }
+        public bool? VisibleOnProfile { get; set; }
     }
 }

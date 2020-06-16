@@ -8,12 +8,12 @@ namespace apiClientDotNet.Models
         public string Id { get; set; }
 
         [JsonProperty("creationDate")]
-        public long CreationDate { get; set; }
+        public long? CreationDate { get; set; }
 
         [JsonProperty("createdByUserId")]
-        public long CreatedByUserId { get; set; }
+        public long? CreatedByUserId { get; set; }
 
         [JsonProperty("active")]
-        public bool Active { get; set; }
+        public bool? Active { get; set; }
     }
 }

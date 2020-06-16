@@ -5,7 +5,7 @@ namespace apiClientDotNet.Models
     public class AdminUserSystemInfo
     {
         [JsonProperty("id")]
-        public long Id;
+        public long? Id;
         
         [JsonProperty("status")]
         public string Status;
@@ -14,12 +14,12 @@ namespace apiClientDotNet.Models
         public string CreatedBy;
         
         [JsonProperty("createdDate")]
-        public long CreatedDate;
+        public long? CreatedDate;
         
         [JsonProperty("lastUpdatedDate")]
-        public long LastUpdatedDate;
+        public long? LastUpdatedDate;
         
         [JsonProperty("lastLoginDate")]
-        public long LastLoginDate;
+        public long? LastLoginDate;
     }
 }

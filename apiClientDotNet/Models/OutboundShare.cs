@@ -24,7 +24,7 @@ namespace apiClientDotNet.Models
         public string Publisher { get; set; }
 
         [JsonProperty("publishDate")]
-        public long PublishDate { get; set; }
+        public long? PublishDate { get; set; }
 
         [JsonProperty("thumbnailUrl")]
         public string ThumbnailUrl { get; set; }
