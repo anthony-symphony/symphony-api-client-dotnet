@@ -35,7 +35,7 @@ namespace apiClientDotNet.Clients
             requestParams.AddParameter("skip", skip);
             requestParams.AddParameter("limit", limit);
             var requestUri = PodConstants.AdminListStreamsEnterprise + requestParams.Query;
-            var result = ExecuteRequest<AdminStreamInfoList>(HttpMethod.Get, new Uri(requestUri, UriKind.Relative));
+            var result = ExecuteRequest<AdminStreamInfoList>(HttpMethod.Post, new Uri(requestUri, UriKind.Relative));
             return result.ParsedObject;
         }
 
